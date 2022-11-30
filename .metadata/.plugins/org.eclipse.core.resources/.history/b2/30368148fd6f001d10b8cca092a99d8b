@@ -1,0 +1,5 @@
+package com.kodlamaio.invantoryServer.business.requests.delete;
+
+public class DeleteCarRequest {
+
+}

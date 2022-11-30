@@ -1,0 +1,5 @@
+package com.kodlamaio.invantoryServer.business.concretes;
+
+public class ModelManager {
+
+}

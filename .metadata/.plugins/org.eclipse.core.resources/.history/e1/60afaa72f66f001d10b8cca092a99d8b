@@ -1,0 +1,5 @@
+package com.kodlamaio.invantoryServer.api.controllers;
+
+public class BrandsController {
+
+}

@@ -1,0 +1,5 @@
+package com.kodlamaio.invantoryServer.business.requestes;
+
+public class CreateBrandRequest {
+
+}

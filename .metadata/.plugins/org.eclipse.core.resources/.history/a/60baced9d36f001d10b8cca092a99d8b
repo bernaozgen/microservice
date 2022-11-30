@@ -1,0 +1,5 @@
+package com.kodlamaio.invantoryServer.business.responses.create;
+
+public class CreateBrandResponse {
+
+}

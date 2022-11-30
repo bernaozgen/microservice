@@ -1,0 +1,5 @@
+package com.kodlamaio.invantoryServer.business.requests;
+
+public class CreateModelRequest {
+
+}
