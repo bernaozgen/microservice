@@ -28,17 +28,17 @@ import lombok.AllArgsConstructor;
 public class BrandsController {
 	private BrandServise brandServise;
 
-	@GetMapping("/getall")
+	@GetMapping
 	public List<GetAllBrandResponse> getAll() {
 		return this.brandServise.getAll();
 	}
 
-	@PostMapping("/add")
+	@PostMapping
 	public CreateBrandResponse add(@RequestBody @Valid CreateBrandRequest createBrandRequest) {
 		return this.brandServise.add(createBrandRequest);
 	}
 
-	@PutMapping("/update")
+	@PutMapping
 	public UpdateBrandResponse update(@RequestBody @Valid UpdateBrandRequest updateBrandRequest) {
 		return this.brandServise.update(updateBrandRequest);
 	}

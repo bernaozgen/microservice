@@ -13,6 +13,7 @@ import com.kodlamaio.invantoryServer.business.requests.create.CreateCarRequest;
 import com.kodlamaio.invantoryServer.business.requests.update.UpdateCarRequest;
 import com.kodlamaio.invantoryServer.business.responses.create.CreateCarResponse;
 import com.kodlamaio.invantoryServer.business.responses.get.GetAllCarResponse;
+import com.kodlamaio.invantoryServer.business.responses.get.GetCarResponse;
 import com.kodlamaio.invantoryServer.business.responses.update.UpdateCarResponse;
 import com.kodlamaio.invantoryServer.dataAccess.CarRepository;
 import com.kodlamaio.invantoryServer.entites.Car;
@@ -78,5 +79,22 @@ public class CarManager implements CarService {
 		if (result != null) {
 			throw new BusinessException("PLATE.EXİSTS");
 		}
+	}
+
+	@Override
+	public void updateCarState(String carId) {
+		Car car = carRepository.findById(carId).get();
+		car.setState(2);
+		carRepository.save(car);
+
+	}
+
+	@Override
+	public GetCarResponse getById(String carId) {
+		Car car = this.carRepository.findById(carId).get();
+
+		GetCarResponse response = this.modelMapperService.forResponse().map(car, GetCarResponse.class);
+
+		return response;
 	}
 }

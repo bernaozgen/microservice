@@ -18,6 +18,7 @@ import com.kodlamaio.invantoryServer.business.requests.create.CreateCarRequest;
 import com.kodlamaio.invantoryServer.business.requests.update.UpdateCarRequest;
 import com.kodlamaio.invantoryServer.business.responses.create.CreateCarResponse;
 import com.kodlamaio.invantoryServer.business.responses.get.GetAllCarResponse;
+import com.kodlamaio.invantoryServer.business.responses.get.GetCarResponse;
 import com.kodlamaio.invantoryServer.business.responses.update.UpdateCarResponse;
 
 import lombok.AllArgsConstructor;
@@ -28,7 +29,7 @@ import lombok.AllArgsConstructor;
 public class CarsController {
 	private CarService carService;
 
-	@PutMapping("/update")
+	@PutMapping
 	public UpdateCarResponse update(@RequestBody @Valid UpdateCarRequest updateCarRequest) {
 		return this.carService.update(updateCarRequest);
 	}
@@ -38,13 +39,18 @@ public class CarsController {
 		this.carService.delete(id);
 	}
 
-	@PostMapping("/add")
+	@PostMapping
 	public CreateCarResponse add(@RequestBody @Valid CreateCarRequest createCarRequest) {
 		return this.carService.add(createCarRequest);
 	}
 
-	@GetMapping("/getall")
+	@GetMapping
 	public List<GetAllCarResponse> getAll() {
 		return this.carService.getAll();
+	}
+
+	@GetMapping("/{carId}")
+	public GetCarResponse getById(@PathVariable String carId) {
+		return this.carService.getById(carId);
 	}
 }
