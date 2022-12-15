@@ -1,5 +1,6 @@
 package com.kodlamaio.paymentservice.kafka;
 
+
 import org.apache.kafka.clients.admin.NewTopic;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,19 +17,20 @@ import lombok.AllArgsConstructor;
 @Service
 @AllArgsConstructor
 public class PaymentProducer {
-	private static final Logger LOGGER = LoggerFactory.getLogger(PaymentProducer.class);// konsola bi
 
-	private NewTopic topic; // topik olusturduk
+	private static final Logger LOGGER = LoggerFactory.getLogger(PaymentProducer.class);
 
-	private KafkaTemplate<String, PaymentCreatedEvent> kafkaCreatedTemplate;// consume gidecek nesne
+	private NewTopic topic;
+	
+	private KafkaTemplate<String, PaymentCreatedEvent> kafkaTemplateCreated;
 
+	
 	public void sendMessage(PaymentCreatedEvent paymentCreatedEvent) {
-		LOGGER.info(String.format("Rental created event => %s", paymentCreatedEvent.toString()));
-
-		Message<PaymentCreatedEvent> message = MessageBuilder.withPayload(paymentCreatedEvent)// mesaj+data gönderiyorum
-				.setHeader(KafkaHeaders.TOPIC, topic.name()).build();// kullandığımız topikleri gönderiyoruz
-
-		kafkaCreatedTemplate.send(message);
+		LOGGER.info(String.format("Payment created event => %s", paymentCreatedEvent.toString()));
+		
+		Message<PaymentCreatedEvent> message = MessageBuilder
+				.withPayload(paymentCreatedEvent)
+				.setHeader(KafkaHeaders.TOPIC, topic.name()).build();		
+		kafkaTemplateCreated.send(message);
 	}
-
 }

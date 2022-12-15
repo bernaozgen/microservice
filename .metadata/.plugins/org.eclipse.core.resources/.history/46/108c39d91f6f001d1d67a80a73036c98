@@ -1,3 +1,0 @@
-spring.application.name=inventory-service
-
-spring.jpa.properties.hibernate.dialect=org.hibernate.dialecy.PostgreSqlDialect

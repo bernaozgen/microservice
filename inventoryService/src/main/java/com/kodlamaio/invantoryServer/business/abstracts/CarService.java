@@ -18,8 +18,8 @@ public interface CarService {
 
 	CreateCarResponse add(CreateCarRequest createCarRequest);
 
-	void updateCarState(String carId);
-
 	GetCarResponse getById(String carId);
+
+	void updateCarState(String carId, int state);
 
 }

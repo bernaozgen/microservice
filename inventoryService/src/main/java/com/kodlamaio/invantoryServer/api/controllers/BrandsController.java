@@ -18,6 +18,7 @@ import com.kodlamaio.invantoryServer.business.requests.create.CreateBrandRequest
 import com.kodlamaio.invantoryServer.business.requests.update.UpdateBrandRequest;
 import com.kodlamaio.invantoryServer.business.responses.create.CreateBrandResponse;
 import com.kodlamaio.invantoryServer.business.responses.get.GetAllBrandResponse;
+import com.kodlamaio.invantoryServer.business.responses.get.GetBrandResponse;
 import com.kodlamaio.invantoryServer.business.responses.update.UpdateBrandResponse;
 
 import lombok.AllArgsConstructor;
@@ -46,5 +47,10 @@ public class BrandsController {
 	@DeleteMapping("/{id}")
 	public void delete(@PathVariable String id) {
 		this.brandServise.delete(id);
+	}
+
+	@GetMapping("/{id}")
+	public GetBrandResponse getById(@PathVariable String id) {
+		return this.brandServise.getById(id);
 	}
 }

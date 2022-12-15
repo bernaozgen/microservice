@@ -18,6 +18,7 @@ import com.kodlamaio.invantoryServer.business.requests.create.CreateModelRequest
 import com.kodlamaio.invantoryServer.business.requests.update.UpdateModelRequest;
 import com.kodlamaio.invantoryServer.business.responses.create.CreateModelResponse;
 import com.kodlamaio.invantoryServer.business.responses.get.GetAllModelResponse;
+import com.kodlamaio.invantoryServer.business.responses.get.GetModelResponse;
 import com.kodlamaio.invantoryServer.business.responses.update.UpdateModelResponse;
 
 import lombok.AllArgsConstructor;
@@ -46,5 +47,10 @@ public class ModelsController {
 	@PutMapping
 	public UpdateModelResponse update(@RequestBody @Valid UpdateModelRequest updateModelRequest) {
 		return this.modelService.update(updateModelRequest);
+	}
+
+	@GetMapping("/{id}")
+	public GetModelResponse getById(@PathVariable String id) {
+		return this.modelService.getById(id);
 	}
 }

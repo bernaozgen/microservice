@@ -39,6 +39,9 @@ public class Payment {
 	@Column(name = "balance")
 	private double balance;
 
-	@Column(name = "statusPayment")
-	private int statusPayment;
+	@Column(name = "total_price")
+	private double totalPrice;
+
+	@Column(name = "status")
+	private int status;
 }

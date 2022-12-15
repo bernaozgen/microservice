@@ -6,16 +6,20 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.kodlamaio.common.events.inventory.model.ModelUpdatedEvent;
 import com.kodlamaio.common.utilities.exceptions.BusinessException;
 import com.kodlamaio.common.utilities.mapping.ModelMapperService;
+import com.kodlamaio.invantoryServer.business.abstracts.BrandServise;
 import com.kodlamaio.invantoryServer.business.abstracts.ModelService;
 import com.kodlamaio.invantoryServer.business.requests.create.CreateModelRequest;
 import com.kodlamaio.invantoryServer.business.requests.update.UpdateModelRequest;
 import com.kodlamaio.invantoryServer.business.responses.create.CreateModelResponse;
 import com.kodlamaio.invantoryServer.business.responses.get.GetAllModelResponse;
+import com.kodlamaio.invantoryServer.business.responses.get.GetModelResponse;
 import com.kodlamaio.invantoryServer.business.responses.update.UpdateModelResponse;
 import com.kodlamaio.invantoryServer.dataAccess.ModelRepository;
 import com.kodlamaio.invantoryServer.entites.Model;
+import com.kodlamaio.invantoryServer.kafka.InventoryProducer;
 
 import lombok.AllArgsConstructor;
 
@@ -24,6 +28,8 @@ import lombok.AllArgsConstructor;
 public class ModelManager implements ModelService {
 	private ModelRepository modelRepository;
 	private ModelMapperService modelMapperService;
+	private InventoryProducer inventoryProducer;
+	private BrandServise brandServise;
 
 	@Override
 	public List<GetAllModelResponse> getAll() {
@@ -61,7 +67,17 @@ public class ModelManager implements ModelService {
 		checkIfModelExistsById(updateModelRequest.getId());
 		checkIfBrandExistsById(updateModelRequest.getBrandId());
 		Model model = this.modelMapperService.forRequest().map(updateModelRequest, Model.class);
-		this.modelRepository.save(model);
+
+		Model updateModel = this.modelRepository.save(model);
+		ModelUpdatedEvent modelUpdatedEvent = new ModelUpdatedEvent();
+		modelUpdatedEvent.setBrandId(updateModel.getBrand().getId());
+		modelUpdatedEvent.setBrandName(updateModel.getBrand().getName());
+		modelUpdatedEvent.setModelId(updateModel.getId());
+		modelUpdatedEvent.setModelName(updateModel.getName());
+		modelUpdatedEvent.setMessage("Model updated");
+
+		this.inventoryProducer.sendMessage(modelUpdatedEvent);
+
 		UpdateModelResponse updateModelResponse = this.modelMapperService.forResponse().map(model,
 				UpdateModelResponse.class);
 		return updateModelResponse;
@@ -80,6 +96,18 @@ public class ModelManager implements ModelService {
 			throw new BusinessException("BRAND.ID.NOT.EXİSTS");
 		}
 	}
-	
+
+	@Override
+	public GetModelResponse getById(String id) {
+		Model model = this.modelRepository.findById(id).get();
+		GetModelResponse getModelResponse = this.modelMapperService.forResponse().map(model, GetModelResponse.class);
+		return getModelResponse;
+	}
+
+//	@Override
+//	public GetModelResponse getById(int id) {
+//		Model model = this.modelRepository.findById(id).get();
+//		return null;
+//	}
 
 }

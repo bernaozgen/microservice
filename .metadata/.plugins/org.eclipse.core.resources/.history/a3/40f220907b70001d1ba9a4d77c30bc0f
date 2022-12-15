@@ -1,8 +1,0 @@
-package com.kodlamaio.invantoryServer.api.controllers;
-
-public class Snippet {
-	public static void main(String[] args) {
-		result
-	}
-}
-

@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.kodlamaio.common.events.inventory.brand.BrandUpdatedEvent;
 import com.kodlamaio.common.utilities.exceptions.BusinessException;
 import com.kodlamaio.common.utilities.mapping.ModelMapperService;
 import com.kodlamaio.invantoryServer.business.abstracts.BrandServise;
@@ -13,9 +14,12 @@ import com.kodlamaio.invantoryServer.business.requests.create.CreateBrandRequest
 import com.kodlamaio.invantoryServer.business.requests.update.UpdateBrandRequest;
 import com.kodlamaio.invantoryServer.business.responses.create.CreateBrandResponse;
 import com.kodlamaio.invantoryServer.business.responses.get.GetAllBrandResponse;
+import com.kodlamaio.invantoryServer.business.responses.get.GetBrandResponse;
 import com.kodlamaio.invantoryServer.business.responses.update.UpdateBrandResponse;
 import com.kodlamaio.invantoryServer.dataAccess.BrandRepository;
 import com.kodlamaio.invantoryServer.entites.Brand;
+import com.kodlamaio.invantoryServer.entites.Car;
+import com.kodlamaio.invantoryServer.kafka.InventoryProducer;
 
 import lombok.AllArgsConstructor;
 
@@ -24,6 +28,7 @@ import lombok.AllArgsConstructor;
 public class BrandManager implements BrandServise {
 	private BrandRepository brandRepository;
 	private ModelMapperService modelMapperService;
+	private InventoryProducer inventoryProducer;
 
 	@Override
 	public List<GetAllBrandResponse> getAll() {
@@ -55,6 +60,13 @@ public class BrandManager implements BrandServise {
 		checkIfBrandExistsByName(updateBrandRequest.getName());
 		Brand brand = this.modelMapperService.forRequest().map(updateBrandRequest, Brand.class);
 		this.brandRepository.save(brand);
+
+		BrandUpdatedEvent brandUpdateEvent = new BrandUpdatedEvent();
+		brandUpdateEvent.setBrandId(updateBrandRequest.getId());
+		brandUpdateEvent.setBrandName(updateBrandRequest.getName());
+		brandUpdateEvent.setMessage("Brand Updeted");
+
+		this.inventoryProducer.sendMessage(brandUpdateEvent);
 		UpdateBrandResponse updateBrandResponse = this.modelMapperService.forResponse().map(brand,
 				UpdateBrandResponse.class);
 		return updateBrandResponse;
@@ -65,6 +77,15 @@ public class BrandManager implements BrandServise {
 		checkIfBrandExistsById(id);
 		this.brandRepository.deleteById(id);
 
+	}
+
+	@Override
+	public GetBrandResponse getById(String id) {
+		Brand brand = this.brandRepository.findById(id).get();
+
+		GetBrandResponse response = this.modelMapperService.forResponse().map(brand, GetBrandResponse.class);
+
+		return response;
 	}
 
 	private void checkIfBrandExistsByName(String name) {

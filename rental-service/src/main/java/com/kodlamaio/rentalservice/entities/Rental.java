@@ -20,14 +20,16 @@ public class Rental {
 	@Id
 	@Column(name = "id")
 	private String id;
-	@Column(name="carId")
+	@Column(name = "carId")
 	private String carId;
-	@Column(name="dateStarted")
-	private LocalDateTime dateStartedId;
-	@Column(name="rentedForDays")
+	@Column(name = "dateStarted")
+	private LocalDateTime dateStarted;
+	@Column(name = "rentedForDays")
 	private int rentedForDays;
-	@Column(name="dailyPrice")
+	@Column(name = "dailyPrice")
 	private double dailyPrice;
-	@Column(name="totalPrice")
+	@Column(name = "totalPrice")
 	private double totalPrice;
+	@Column(name = "condition")
+	private int condition;
 }

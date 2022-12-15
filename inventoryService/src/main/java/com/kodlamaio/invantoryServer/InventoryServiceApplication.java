@@ -1,4 +1,4 @@
-package com.kodlamaio.invantoryServer;
+ package com.kodlamaio.invantoryServer;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;

@@ -1,5 +1,0 @@
-package com.kodlamaio.invantoryServer.dataAccess;
-
-public interface CarRepository extends JpaRepository<Car, String> {
-
-}

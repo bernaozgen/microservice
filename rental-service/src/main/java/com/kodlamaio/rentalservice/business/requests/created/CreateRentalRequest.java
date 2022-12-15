@@ -8,9 +8,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateRentalRequest {
-
 	private String carId;
 	private int rentedForDays;
 	private double dailyPrice;
+	private String cardNo;
+	private String cardHolder;
+	private double balance;
 
 }
