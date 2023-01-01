@@ -2,11 +2,13 @@ package com.kodlamaio.filterService.api.controllers;
 
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.kodlamaio.common.utilities.results.DataResult;
 import com.kodlamaio.filterService.business.abstracts.FilterService;
 import com.kodlamaio.filterService.business.responses.get.GetAllFiltersResponse;
 import com.kodlamaio.filterService.business.responses.get.GetFiltersResponse;
@@ -20,33 +22,57 @@ public class FilterController {
 	private FilterService filterService;
 
 	@GetMapping
-	public List<GetAllFiltersResponse> getAll() {
-		return filterService.getAll();
+	public ResponseEntity<?> getAll() {
+		DataResult<List<GetAllFiltersResponse>> result = this.filterService.getAll();
+		if (result.isSuccess()) {
+			return ResponseEntity.ok(result);
+		}
+		return ResponseEntity.badRequest().body(result);
 	}
 
 	@GetMapping("{brandName}")
-	public List<GetAllFiltersResponse> getByBrandName(@PathVariable String brandName) {
-		return filterService.getByBrandName(brandName);
+	public ResponseEntity<?> getByBrandName(@PathVariable String brandName) {
+		DataResult<List<GetAllFiltersResponse>> result = this.filterService.getByBrandName(brandName);
+		if (result.isSuccess()) {
+			return ResponseEntity.ok(result);
+		}
+		return ResponseEntity.badRequest().body(result);
 	}
 
 	@GetMapping("{modelName}")
-	public List<GetAllFiltersResponse> getByModelName(@PathVariable String modelName) {
-		return filterService.getByModelName(modelName);
+	public ResponseEntity<?> getByModelName(@PathVariable String modelName) {
+		DataResult<List<GetAllFiltersResponse>> result = this.filterService.getByModelName(modelName);
+		if (result.isSuccess()) {
+			return ResponseEntity.ok(result);
+		}
+		return ResponseEntity.badRequest().body(result);
 	}
 
 	@GetMapping("{plate}")
-	public GetFiltersResponse getByPlate(@PathVariable String plate) {
-		return filterService.getByPlate(plate);
+	public ResponseEntity<?> getByPlate(@PathVariable String plate) {
+		DataResult<GetFiltersResponse> result = this.filterService.getByPlate(plate);
+		if (result.isSuccess()) {
+			return ResponseEntity.ok(result);
+		}
+		return ResponseEntity.badRequest().body(result);
 	}
 
 	@GetMapping("dailyprice/{min}-{max}")
-	public List<GetAllFiltersResponse> getByDailyPrice(@PathVariable double min, @PathVariable double max) {
-		return filterService.getByDailyPrice(min, max);
+	public ResponseEntity<?> getByDailyPrice(@PathVariable double min, @PathVariable double max) {
+		DataResult<List<GetAllFiltersResponse>> result = this.filterService.getByDailyPrice(min, max);
+		if (result.isSuccess()) {
+			return ResponseEntity.ok(result);
+		}
+		return ResponseEntity.badRequest().body(result);
 	}
 
 	@GetMapping("modelyear/{min}-{max}")
-	public List<GetAllFiltersResponse> getByModelYear(@PathVariable int min, @PathVariable int max) {
-		return filterService.getByModelYear(min, max);
+	public ResponseEntity<?> getByModelYear(@PathVariable int min, @PathVariable int max) {
+		DataResult<List<GetAllFiltersResponse>> result = this.filterService.getByModelYear(min, max);
+		if (result.isSuccess()) {
+			return ResponseEntity.ok(result);
+		}
+		return ResponseEntity.badRequest().body(result);
 	}
 
 }

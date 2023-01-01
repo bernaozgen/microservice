@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.kodlamaio.common.utilities.results.DataResult;
+import com.kodlamaio.common.utilities.results.Result;
 import com.kodlamaio.invantoryServer.business.abstracts.ModelService;
 import com.kodlamaio.invantoryServer.business.requests.create.CreateModelRequest;
 import com.kodlamaio.invantoryServer.business.requests.update.UpdateModelRequest;
@@ -30,27 +33,47 @@ public class ModelsController {
 	private ModelService modelService;
 
 	@GetMapping
-	public List<GetAllModelResponse> getAll() {
-		return this.modelService.getAll();
+	public ResponseEntity<?> getAll() {
+		DataResult<List<GetAllModelResponse>> result = this.modelService.getAll();
+		if (result.isSuccess()) {
+			return ResponseEntity.ok(result);
+		}
+		return ResponseEntity.badRequest().body(result);
 	}
 
 	@PostMapping
-	public CreateModelResponse add(@RequestBody @Valid CreateModelRequest createBrandRequest) {
-		return this.modelService.add(createBrandRequest);
+	public ResponseEntity<?> add(@RequestBody @Valid CreateModelRequest createBrandRequest) {
+		DataResult<CreateModelResponse> result = this.modelService.add(createBrandRequest);
+		if (result.isSuccess()) {
+			return ResponseEntity.ok(result);
+		}
+		return ResponseEntity.badRequest().body(result);
 	}
 
 	@DeleteMapping("/{id}")
-	public void delete(@PathVariable String id) {
-		this.modelService.delete(id);
+	public ResponseEntity<?> delete(@PathVariable String id) {
+		Result result = this.modelService.delete(id);
+		if (result.isSuccess()) {
+			return ResponseEntity.ok(result);
+		}
+		return ResponseEntity.badRequest().body(result);
 	}
 
 	@PutMapping
-	public UpdateModelResponse update(@RequestBody @Valid UpdateModelRequest updateModelRequest) {
-		return this.modelService.update(updateModelRequest);
+	public ResponseEntity<?> update(@RequestBody @Valid UpdateModelRequest updateModelRequest) {
+		DataResult<UpdateModelResponse> result = this.modelService.update(updateModelRequest);
+		if (result.isSuccess()) {
+			return ResponseEntity.ok(result);
+		}
+		return ResponseEntity.badRequest().body(result);
 	}
 
 	@GetMapping("/{id}")
-	public GetModelResponse getById(@PathVariable String id) {
-		return this.modelService.getById(id);
+	public ResponseEntity<?> getById(@PathVariable String id) {
+		DataResult<GetModelResponse> result = this.modelService.getById(id);
+		if (result.isSuccess()) {
+			return ResponseEntity.ok(result);
+		}
+		return ResponseEntity.badRequest().body(result);
 	}
 }

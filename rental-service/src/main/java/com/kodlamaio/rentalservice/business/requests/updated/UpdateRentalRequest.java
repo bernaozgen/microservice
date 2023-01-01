@@ -1,5 +1,8 @@
 package com.kodlamaio.rentalservice.business.requests.updated;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,9 +11,16 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UpdateRentalRequest {
-	private String oldCarId;
-	private String newCarId;
+	@NotNull 
+	@NotEmpty
+	private String id;
+    @NotEmpty
+    @NotNull
+	private String carId;
+    @NotNull
 	private int rentedForDays;
+    @NotNull
 	private double dailyPrice;
+
 
 }

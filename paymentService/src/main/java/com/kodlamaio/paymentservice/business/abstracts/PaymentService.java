@@ -7,6 +7,6 @@ public interface PaymentService {
 
 	void updateStatus(String id, int status);
 
-	void delete(String id);
+	void delete(String id); 
 
 }

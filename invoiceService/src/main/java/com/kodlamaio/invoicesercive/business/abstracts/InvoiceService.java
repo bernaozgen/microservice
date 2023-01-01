@@ -2,19 +2,24 @@ package com.kodlamaio.invoicesercive.business.abstracts;
 
 import java.util.List;
 
+import com.kodlamaio.common.utilities.results.DataResult;
+import com.kodlamaio.common.utilities.results.Result;
 import com.kodlamaio.invoicesercive.business.requests.CreateInvoiceRequest;
 import com.kodlamaio.invoicesercive.business.requests.UpdateInvoiceRequest;
 import com.kodlamaio.invoicesercive.business.responses.CreateInvoiceResponse;
 import com.kodlamaio.invoicesercive.business.responses.GetAllInvoiceResponse;
+import com.kodlamaio.invoicesercive.business.responses.GetInvoiceResponse;
 import com.kodlamaio.invoicesercive.business.responses.UpdateInvoiceResponse;
 
 public interface InvoiceService {
-	CreateInvoiceResponse add(CreateInvoiceRequest createInvoiceRequest);
+	DataResult<CreateInvoiceResponse> add(CreateInvoiceRequest createInvoiceRequest);
 
-	void delete(String id);
+	Result delete(String id);
 
-	UpdateInvoiceResponse update(UpdateInvoiceRequest invoiceRequest);
+	DataResult<UpdateInvoiceResponse> update(UpdateInvoiceRequest invoiceRequest);
 
-	List<GetAllInvoiceResponse> getAll();
+	DataResult<List<GetAllInvoiceResponse>> getAll();
+
+	DataResult<GetInvoiceResponse> getById(String id);
 
 }

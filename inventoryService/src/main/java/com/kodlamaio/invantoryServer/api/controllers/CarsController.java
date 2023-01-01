@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.kodlamaio.common.utilities.results.DataResult;
+import com.kodlamaio.common.utilities.results.Result;
 import com.kodlamaio.invantoryServer.business.abstracts.CarService;
 import com.kodlamaio.invantoryServer.business.requests.create.CreateCarRequest;
 import com.kodlamaio.invantoryServer.business.requests.update.UpdateCarRequest;
@@ -30,27 +33,47 @@ public class CarsController {
 	private CarService carService;
 
 	@PutMapping
-	public UpdateCarResponse update(@RequestBody @Valid UpdateCarRequest updateCarRequest) {
-		return this.carService.update(updateCarRequest);
+	public ResponseEntity<?> update(@RequestBody @Valid UpdateCarRequest updateCarRequest) {
+		DataResult<UpdateCarResponse> result = this.carService.update(updateCarRequest);
+		if (result.isSuccess()) {
+			return ResponseEntity.ok(result);
+		}
+		return ResponseEntity.badRequest().body(result);
 	}
 
 	@DeleteMapping("/{id}")
-	public void delete(@PathVariable @Valid String id) {
-		this.carService.delete(id);
+	public ResponseEntity<?> delete(@PathVariable @Valid String id) {
+		Result result = this.carService.delete(id);
+		if (result.isSuccess()) {
+			return ResponseEntity.ok(result);
+		}
+		return ResponseEntity.badRequest().body(result);
 	}
 
 	@PostMapping
-	public CreateCarResponse add(@RequestBody @Valid CreateCarRequest createCarRequest) {
-		return this.carService.add(createCarRequest);
+	public ResponseEntity<?> add(@RequestBody @Valid CreateCarRequest createCarRequest) {
+		DataResult<CreateCarResponse> result = this.carService.add(createCarRequest);
+		if (result.isSuccess()) {
+			return ResponseEntity.ok(result);
+		}
+		return ResponseEntity.badRequest().body(result);
 	}
 
 	@GetMapping
-	public List<GetAllCarResponse> getAll() {
-		return this.carService.getAll();
+	public ResponseEntity<?> getAll() {
+		DataResult<List<GetAllCarResponse>> result = this.carService.getAll();
+		if (result.isSuccess()) {
+			return ResponseEntity.ok(result);
+		}
+		return ResponseEntity.badRequest().body(result);
 	}
 
 	@GetMapping("/{carId}")
-	public GetCarResponse getById(@PathVariable String carId) {
-		return this.carService.getById(carId);
+	public ResponseEntity<?> getById(@PathVariable String carId) {
+		DataResult<GetCarResponse> result = this.carService.getById(carId);
+		if (result.isSuccess()) {
+			return ResponseEntity.ok(result);
+		}
+		return ResponseEntity.badRequest().body(result);
 	}
 }

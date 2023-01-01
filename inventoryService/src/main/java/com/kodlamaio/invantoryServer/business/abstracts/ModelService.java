@@ -2,6 +2,13 @@ package com.kodlamaio.invantoryServer.business.abstracts;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import com.kodlamaio.common.utilities.results.DataResult;
+import com.kodlamaio.common.utilities.results.Result;
 import com.kodlamaio.invantoryServer.business.requests.create.CreateModelRequest;
 import com.kodlamaio.invantoryServer.business.requests.update.UpdateModelRequest;
 import com.kodlamaio.invantoryServer.business.responses.create.CreateModelResponse;
@@ -10,14 +17,14 @@ import com.kodlamaio.invantoryServer.business.responses.get.GetModelResponse;
 import com.kodlamaio.invantoryServer.business.responses.update.UpdateModelResponse;
 
 public interface ModelService {
-	List<GetAllModelResponse> getAll();
+	DataResult<List<GetAllModelResponse>> getAll();
 
-	CreateModelResponse add(CreateModelRequest createBrandRequest);
+	DataResult<CreateModelResponse> add(@RequestBody @Valid CreateModelRequest createBrandRequest);
 
-	void delete(String id);
+	Result delete(@PathVariable String id);
 
-	UpdateModelResponse update(UpdateModelRequest updateModelRequest);
+	DataResult<UpdateModelResponse> update(@RequestBody @Valid UpdateModelRequest updateModelRequest);
 
-	GetModelResponse getById(String id);
+	DataResult<GetModelResponse> getById(@PathVariable String id);
 
 }

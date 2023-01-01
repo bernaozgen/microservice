@@ -2,13 +2,20 @@ package com.kodlamaio.rentalservice.api;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.kodlamaio.common.utilities.results.DataResult;
+import com.kodlamaio.common.utilities.results.Result;
 import com.kodlamaio.rentalservice.business.abstracts.RentalService;
 import com.kodlamaio.rentalservice.business.requests.created.CreateRentalRequest;
 import com.kodlamaio.rentalservice.business.requests.updated.UpdateRentalRequest;
@@ -25,18 +32,39 @@ public class RentalsController {
 	private RentalService rentalService;
 
 	@PostMapping
-	public CreateRentalResponse add(@RequestBody CreateRentalRequest createRentalRequest) {
-		return rentalService.add(createRentalRequest);
+	public ResponseEntity<?> add(@RequestBody @Valid CreateRentalRequest createRentalRequest) {
+		DataResult<CreateRentalResponse> result = this.rentalService.add(createRentalRequest);
+		if (result.isSuccess()) {
+			return ResponseEntity.ok(result);
+		}
+		return ResponseEntity.badRequest().body(result);
 	}
 
 	@PutMapping
-	public UpdateRentalResponse update(@RequestBody UpdateRentalRequest updateRentalRequest) {
-		return rentalService.update(updateRentalRequest);
+	public ResponseEntity<?> update(@RequestBody  @Valid UpdateRentalRequest updateRentalRequest) {
+		DataResult<UpdateRentalResponse> result = this.rentalService.update(updateRentalRequest);
+		if (result.isSuccess()) {
+			return ResponseEntity.ok(result);
+		}
+		return ResponseEntity.badRequest().body(result);
 	}
 
 	@GetMapping
-	public List<GetAllRentalResponse> getAll() {
-		return rentalService.getAll();
+	public ResponseEntity<?> getAll() {
+		DataResult<List<GetAllRentalResponse>> result = this.rentalService.getAll();
+		if (result.isSuccess()) {
+			return ResponseEntity.ok(result);
+		}
+		return ResponseEntity.badRequest().body(result);
+
 	}
 
+	@DeleteMapping("/{id}")
+	public ResponseEntity<?> delete(@PathVariable String id) {
+		Result result = this.rentalService.delete(id);
+		if (result.isSuccess()) {
+			return ResponseEntity.ok(result);
+		}
+		return ResponseEntity.badRequest().body(result);
+	}
 }

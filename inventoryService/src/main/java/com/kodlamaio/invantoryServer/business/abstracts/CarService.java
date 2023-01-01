@@ -2,6 +2,8 @@ package com.kodlamaio.invantoryServer.business.abstracts;
 
 import java.util.List;
 
+import com.kodlamaio.common.utilities.results.DataResult;
+import com.kodlamaio.common.utilities.results.Result;
 import com.kodlamaio.invantoryServer.business.requests.create.CreateCarRequest;
 import com.kodlamaio.invantoryServer.business.requests.update.UpdateCarRequest;
 import com.kodlamaio.invantoryServer.business.responses.create.CreateCarResponse;
@@ -10,15 +12,15 @@ import com.kodlamaio.invantoryServer.business.responses.get.GetCarResponse;
 import com.kodlamaio.invantoryServer.business.responses.update.UpdateCarResponse;
 
 public interface CarService {
-	UpdateCarResponse update(UpdateCarRequest updateCarRequest);
+	DataResult<UpdateCarResponse> update(UpdateCarRequest updateCarRequest);
 
-	void delete(String id);
+	Result delete(String id);
 
-	List<GetAllCarResponse> getAll();
+	DataResult<List<GetAllCarResponse>> getAll();
 
-	CreateCarResponse add(CreateCarRequest createCarRequest);
+	DataResult<CreateCarResponse> add(CreateCarRequest createCarRequest);
 
-	GetCarResponse getById(String carId);
+	DataResult<GetCarResponse> getById(String carId);
 
 	void updateCarState(String carId, int state);
 

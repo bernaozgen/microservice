@@ -11,8 +11,13 @@ import com.kodlamaio.common.events.inventory.car.CarDeletedEvent;
 import com.kodlamaio.common.events.inventory.car.CarUpdatedEvent;
 import com.kodlamaio.common.utilities.exceptions.BusinessException;
 import com.kodlamaio.common.utilities.mapping.ModelMapperService;
+import com.kodlamaio.common.utilities.results.DataResult;
+import com.kodlamaio.common.utilities.results.Result;
+import com.kodlamaio.common.utilities.results.SuccessDataResult;
+import com.kodlamaio.common.utilities.results.SuccessResult;
 import com.kodlamaio.invantoryServer.business.abstracts.CarService;
 import com.kodlamaio.invantoryServer.business.abstracts.ModelService;
+import com.kodlamaio.invantoryServer.business.constants.Messages;
 import com.kodlamaio.invantoryServer.business.requests.create.CreateCarRequest;
 import com.kodlamaio.invantoryServer.business.requests.update.UpdateCarRequest;
 import com.kodlamaio.invantoryServer.business.responses.create.CreateCarResponse;
@@ -34,20 +39,20 @@ public class CarManager implements CarService {
 	private ModelService modelService;
 
 	@Override
-	public List<GetAllCarResponse> getAll() {
+	public DataResult<List<GetAllCarResponse>> getAll() {
 		List<Car> cars = this.carRepository.findAll();
 
 		List<GetAllCarResponse> response = cars.stream()
 				.map(car -> this.modelMapperService.forResponse().map(car, GetAllCarResponse.class))
 				.collect(Collectors.toList());
 
-		return response;
+		return new SuccessDataResult<List<GetAllCarResponse>>(response, Messages.CarListed);
 	}
 
 	@Override
-	public CreateCarResponse add(CreateCarRequest createCarRequest) {
+	public DataResult<CreateCarResponse> add(CreateCarRequest createCarRequest) {
 		checkIfCarExistByPlate(createCarRequest.getPlate());
-
+		checkIfModelExistByModelId(createCarRequest.getModelId());
 		Car car = this.modelMapperService.forRequest().map(createCarRequest, Car.class);
 		car.setId(UUID.randomUUID().toString());// unig sayı uretir
 		car.setState(1);
@@ -64,13 +69,14 @@ public class CarManager implements CarService {
 		this.inventoryProducer.sendMessage(carCreatedEvent);
 
 		CreateCarResponse createCarResponse = this.modelMapperService.forResponse().map(car, CreateCarResponse.class);
-		return createCarResponse;
+		return new SuccessDataResult<CreateCarResponse>(createCarResponse, Messages.CarCreated);
 	}
 
 	@Override
-	public UpdateCarResponse update(UpdateCarRequest updateCarRequest) {
+	public DataResult<UpdateCarResponse> update(UpdateCarRequest updateCarRequest) {
 		checkIfCarExistByPlate(updateCarRequest.getPlate());
 		checkIfCarExistById(updateCarRequest.getId());
+		checkIfModelExistByModelId(updateCarRequest.getModelId());
 
 		Car car = this.modelMapperService.forRequest().map(updateCarRequest, Car.class);
 		car.setState(1);
@@ -86,11 +92,11 @@ public class CarManager implements CarService {
 		this.inventoryProducer.sendMessage(carUpdatedEvent);
 
 		UpdateCarResponse updateCarResponse = this.modelMapperService.forResponse().map(car, UpdateCarResponse.class);
-		return updateCarResponse;
+		return new SuccessDataResult<UpdateCarResponse>(updateCarResponse, Messages.CarUpdated);
 	}
 
 	@Override
-	public void delete(String id) {
+	public Result delete(String id) {
 		checkIfCarExistById(id);
 
 		this.carRepository.deleteById(id);
@@ -98,7 +104,7 @@ public class CarManager implements CarService {
 		carDeletedEvent.setMessage("Car Deleted");
 		carDeletedEvent.setCarId(id);
 		this.inventoryProducer.sendMessage(carDeletedEvent);
-
+		return new SuccessResult(Messages.CarDeleted);
 	}
 
 	@Override
@@ -110,12 +116,12 @@ public class CarManager implements CarService {
 	}
 
 	@Override
-	public GetCarResponse getById(String carId) {
+	public DataResult<GetCarResponse> getById(String carId) {
 		Car car = this.carRepository.findById(carId).get();
 
 		GetCarResponse response = this.modelMapperService.forResponse().map(car, GetCarResponse.class);
 
-		return response;
+		return new SuccessDataResult<GetCarResponse>(response, Messages.CarListed);
 	}
 
 	private void checkIfCarExistById(String id) {
@@ -132,8 +138,12 @@ public class CarManager implements CarService {
 			throw new BusinessException("PLATE.EXİSTS");
 		}
 	}
-//	private void checkIfModelExistByModelId(String modelId) {
-//		var result =this.modelService
-//	}
+
+	private void checkIfModelExistByModelId(String modelId) {
+		var result = this.modelService.getById(modelId);
+		if (result == null) {
+			throw new BusinessException(Messages.ModelIdNotFound);
+		}
+	}
 
 }

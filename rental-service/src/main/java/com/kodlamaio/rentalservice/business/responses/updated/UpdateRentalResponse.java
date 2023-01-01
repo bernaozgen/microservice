@@ -1,5 +1,7 @@
 package com.kodlamaio.rentalservice.business.responses.updated;
 
+import java.time.LocalDateTime;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,7 +12,8 @@ import lombok.NoArgsConstructor;
 public class UpdateRentalResponse {
 	private String id;
 	private String carId;
+	private LocalDateTime dateStarted;
 	private int rentedForDays;
 	private double dailyPrice;
-	private String state;
+	private double totalPrice; 
 }

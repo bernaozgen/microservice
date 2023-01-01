@@ -12,7 +12,10 @@ import com.kodlamaio.common.events.inventory.car.CarDeletedEvent;
 import com.kodlamaio.common.events.inventory.car.CarUpdatedEvent;
 import com.kodlamaio.common.events.inventory.model.ModelUpdatedEvent;
 import com.kodlamaio.common.utilities.mapping.ModelMapperService;
+import com.kodlamaio.common.utilities.results.DataResult;
+import com.kodlamaio.common.utilities.results.SuccessDataResult;
 import com.kodlamaio.filterService.business.abstracts.FilterService;
+import com.kodlamaio.filterService.business.constants.Messages;
 import com.kodlamaio.filterService.business.responses.get.GetAllFiltersResponse;
 import com.kodlamaio.filterService.business.responses.get.GetFiltersResponse;
 import com.kodlamaio.filterService.dataAccess.FilterRepository;
@@ -27,37 +30,38 @@ public class FilterManager implements FilterService {
 	private ModelMapperService modelMapperService;
 
 	@Override
-	public List<GetAllFiltersResponse> getAll() {
+	public DataResult<List<GetAllFiltersResponse>> getAll() {
 		List<Filter> filters = filterRepository.findAll();
 		List<GetAllFiltersResponse> responses = filters.stream()
 				.map(filter -> this.modelMapperService.forRequest().map(filter, GetAllFiltersResponse.class))
 				.collect(Collectors.toList());
-		return responses;
+		return new SuccessDataResult<List<GetAllFiltersResponse>>(responses ,Messages.FilterListed);
 	}
-
-	public List<GetAllFiltersResponse> getByBrandName(String brandName) {
+	@Override
+	public DataResult<List<GetAllFiltersResponse>> getByBrandName(String brandName) {
 		List<Filter> filters = this.filterRepository.findByBrandName(brandName);
 		List<GetAllFiltersResponse> responses = filters.stream()
 				.map(filter -> this.modelMapperService.forResponse().map(filter, GetAllFiltersResponse.class))
 				.collect(Collectors.toList());
-		return responses;
+		return new SuccessDataResult<List<GetAllFiltersResponse>>(responses , Messages.BrandNameListed);
 	}
-
-	public List<GetAllFiltersResponse> getByModelName(String modelName) {
+	@Override
+	public DataResult<List<GetAllFiltersResponse>> getByModelName(String modelName) {
 		List<Filter> filters = this.filterRepository.findByModelName(modelName);
 		List<GetAllFiltersResponse> responses = filters.stream()
 				.map(filter -> this.modelMapperService.forResponse().map(filter, GetAllFiltersResponse.class))
 				.collect(Collectors.toList());
-		return responses;
+		
+		return new SuccessDataResult<List<GetAllFiltersResponse>>(responses , Messages.ModelNameListed);
 	}
-
-	public GetFiltersResponse getByPlate(String plate) {
+	@Override
+	public DataResult<GetFiltersResponse> getByPlate(String plate) {
 		Filter filter = this.filterRepository.findByPlate(plate);
 		GetFiltersResponse response = this.modelMapperService.forResponse().map(filter, GetFiltersResponse.class);
-		return response;
+		return new SuccessDataResult<GetFiltersResponse>(response,Messages.Plate);
 	}
-
-	public List<GetAllFiltersResponse> getByDailyPrice(double min, double max) {
+	@Override
+	public DataResult<List<GetAllFiltersResponse>> getByDailyPrice(double min, double max) {
 		List<Filter> filters = this.filterRepository.findAll();
 		List<GetAllFiltersResponse> getAllFiltersResponses = new ArrayList<GetAllFiltersResponse>();
 		for (Filter filter : filters) {
@@ -67,10 +71,10 @@ public class FilterManager implements FilterService {
 				getAllFiltersResponses.add(response);
 			}
 		}
-		return getAllFiltersResponses;
+		return new SuccessDataResult<List<GetAllFiltersResponse>>(getAllFiltersResponses,Messages.DailyPriceListed) ;
 	}
-
-	public List<GetAllFiltersResponse> getByModelYear(int min, int max) {
+	@Override
+	public DataResult<List<GetAllFiltersResponse>> getByModelYear(int min, int max) {
 		List<Filter> filters = this.filterRepository.findAll();
 		List<GetAllFiltersResponse> getAllFiltersResponses = new ArrayList<GetAllFiltersResponse>();
 		for (Filter filter : filters) {
@@ -80,7 +84,7 @@ public class FilterManager implements FilterService {
 				getAllFiltersResponses.add(response);
 			}
 		}
-		return getAllFiltersResponses;
+		return new SuccessDataResult<List<GetAllFiltersResponse>>(getAllFiltersResponses,Messages.ModelYearListed);
 	}
 
 	@Override

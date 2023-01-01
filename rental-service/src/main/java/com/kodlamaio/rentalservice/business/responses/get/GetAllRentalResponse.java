@@ -17,4 +17,5 @@ public class GetAllRentalResponse {
 	private int rentedForDays;
 	private double dailyPrice;
 	private double totalPrice;
+	
 }

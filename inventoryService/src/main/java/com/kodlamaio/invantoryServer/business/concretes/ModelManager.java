@@ -9,8 +9,13 @@ import org.springframework.stereotype.Service;
 import com.kodlamaio.common.events.inventory.model.ModelUpdatedEvent;
 import com.kodlamaio.common.utilities.exceptions.BusinessException;
 import com.kodlamaio.common.utilities.mapping.ModelMapperService;
-import com.kodlamaio.invantoryServer.business.abstracts.BrandServise;
+import com.kodlamaio.common.utilities.results.DataResult;
+import com.kodlamaio.common.utilities.results.Result;
+import com.kodlamaio.common.utilities.results.SuccessDataResult;
+import com.kodlamaio.common.utilities.results.SuccessResult;
+import com.kodlamaio.invantoryServer.business.abstracts.BrandService;
 import com.kodlamaio.invantoryServer.business.abstracts.ModelService;
+import com.kodlamaio.invantoryServer.business.constants.Messages;
 import com.kodlamaio.invantoryServer.business.requests.create.CreateModelRequest;
 import com.kodlamaio.invantoryServer.business.requests.update.UpdateModelRequest;
 import com.kodlamaio.invantoryServer.business.responses.create.CreateModelResponse;
@@ -29,41 +34,41 @@ public class ModelManager implements ModelService {
 	private ModelRepository modelRepository;
 	private ModelMapperService modelMapperService;
 	private InventoryProducer inventoryProducer;
-	private BrandServise brandServise;
+	private BrandService brandServise;
 
 	@Override
-	public List<GetAllModelResponse> getAll() {
+	public DataResult<List<GetAllModelResponse>> getAll() {
 		List<Model> models = this.modelRepository.findAll();
 
 		List<GetAllModelResponse> response = models.stream()
 				.map(model -> this.modelMapperService.forResponse().map(model, GetAllModelResponse.class))
 				.collect(Collectors.toList());
 
-		return response;
+		return new SuccessDataResult<List<GetAllModelResponse>>(response, Messages.ModelListed);
 	}
 
 	@Override
-	public CreateModelResponse add(CreateModelRequest createModelRequest) {
+	public DataResult<CreateModelResponse> add(CreateModelRequest createModelRequest) {
 		checkIfBrandExistsById(createModelRequest.getBrandId());
 		Model model = this.modelMapperService.forRequest().map(createModelRequest, Model.class);
 		model.setId(UUID.randomUUID().toString());
 
 		this.modelRepository.save(model);
 
-		CreateModelResponse createBrandResponse = this.modelMapperService.forResponse().map(model,
+		CreateModelResponse createModelResponse = this.modelMapperService.forResponse().map(model,
 				CreateModelResponse.class);
-		return createBrandResponse;
+		return new SuccessDataResult<CreateModelResponse>(createModelResponse, Messages.ModelCreated);
 	}
 
 	@Override
-	public void delete(String id) {
+	public Result delete(String id) {
 		checkIfModelExistsById(id);
 		this.modelRepository.deleteById(id);
-
+		return new SuccessResult(Messages.ModelDeleted);
 	}
 
 	@Override
-	public UpdateModelResponse update(UpdateModelRequest updateModelRequest) {
+	public DataResult<UpdateModelResponse> update(UpdateModelRequest updateModelRequest) {
 		checkIfModelExistsById(updateModelRequest.getId());
 		checkIfBrandExistsById(updateModelRequest.getBrandId());
 		Model model = this.modelMapperService.forRequest().map(updateModelRequest, Model.class);
@@ -80,34 +85,28 @@ public class ModelManager implements ModelService {
 
 		UpdateModelResponse updateModelResponse = this.modelMapperService.forResponse().map(model,
 				UpdateModelResponse.class);
-		return updateModelResponse;
+		return new SuccessDataResult<UpdateModelResponse>(updateModelResponse, Messages.ModelUpdated);
 	}
 
 	private void checkIfModelExistsById(String id) {
 		var result = this.modelRepository.findById(id);
 		if (result == null) {
-			throw new BusinessException("MODEL.NOT.EXİSTS");
+			throw new BusinessException(Messages.ModelIdNotFound);
 		}
 	}
 
 	private void checkIfBrandExistsById(String brandId) {
-		var result = this.modelRepository.findById(brandId);
+		var result = this.brandServise.getById(brandId);
 		if (result == null) {
-			throw new BusinessException("BRAND.ID.NOT.EXİSTS");
+			throw new BusinessException(Messages.BrandIdNotFound);
 		}
 	}
 
 	@Override
-	public GetModelResponse getById(String id) {
+	public DataResult<GetModelResponse> getById(String id) {
 		Model model = this.modelRepository.findById(id).get();
 		GetModelResponse getModelResponse = this.modelMapperService.forResponse().map(model, GetModelResponse.class);
-		return getModelResponse;
+		return new SuccessDataResult<GetModelResponse>(getModelResponse, Messages.ModelListed);
 	}
-
-//	@Override
-//	public GetModelResponse getById(int id) {
-//		Model model = this.modelRepository.findById(id).get();
-//		return null;
-//	}
 
 }

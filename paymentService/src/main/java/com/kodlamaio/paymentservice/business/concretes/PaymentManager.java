@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.kodlamaio.common.events.payments.PaymentCreatedEvent;
 import com.kodlamaio.common.utilities.exceptions.BusinessException;
 import com.kodlamaio.common.utilities.mapping.ModelMapperService;
+import com.kodlamaio.paymentservice.adapters.PosCheckService;
 import com.kodlamaio.paymentservice.business.abstracts.PaymentService;
 import com.kodlamaio.paymentservice.business.requests.CreatePaymentRequest;
 import com.kodlamaio.paymentservice.dataAccess.PaymentRepository;
@@ -21,6 +22,7 @@ public class PaymentManager implements PaymentService {
 	private PaymentRepository paymentRepository;
 	private ModelMapperService modelMapperService;
 	private PaymentProducer paymentProducer;
+	private PosCheckService posCheckService;
 
 	@Override
 	public void add(CreatePaymentRequest createPaymentRequest) {
@@ -28,20 +30,13 @@ public class PaymentManager implements PaymentService {
 		Payment payment = this.modelMapperService.forRequest().map(createPaymentRequest, Payment.class);
 		checkIfBalanceUnderTotalPrice(createPaymentRequest.getTotalPrice(), createPaymentRequest.getBalance());
 		payment.setId(UUID.randomUUID().toString());
-
+		posCheckService.pay();
 		this.paymentRepository.save(payment);
 		PaymentCreatedEvent paymentCreatedEvent = new PaymentCreatedEvent();
 		paymentCreatedEvent.setRentalId(createPaymentRequest.getRentalId());
 		paymentCreatedEvent.setMessage("Payment Created");
 
 		this.paymentProducer.sendMessage(paymentCreatedEvent);
-
-	}
-
-	private void checkIfBalanceUnderTotalPrice(double totalPrice, double balance) {
-		if (balance < totalPrice) {
-			throw new BusinessException("insufficient balance");
-		}
 
 	}
 
@@ -55,6 +50,13 @@ public class PaymentManager implements PaymentService {
 	@Override
 	public void delete(String id) {
 		paymentRepository.deleteById(id);
+	}
+
+	private void checkIfBalanceUnderTotalPrice(double totalPrice, double balance) {
+		if (balance < totalPrice) {
+			throw new BusinessException("insufficient balance");
+		}
+
 	}
 
 }
