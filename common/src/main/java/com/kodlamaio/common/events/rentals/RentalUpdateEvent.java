@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 public class RentalUpdateEvent {
 
 	private String message;
-	private String carNewId;
-	private String carOldId;
+	private String oldCarId;
+	private String newCarId;
 }

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-    <fullyQualifiedTypeName name="com.kodlamaio.common.rentalPayment.PayMoneyRequest"/>
     <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.ExceptionHandler"/>
     <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.ResponseStatus"/>
     <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.RestControllerAdvice"/>
@@ -29,7 +28,6 @@
     <fullyQualifiedTypeName name="com.kodlamaio.rentalservice.business.responses.updated.UpdateRentalResponse"/>
     <fullyQualifiedTypeName name="com.kodlamaio.rentalservice.business.responses.get.GetAllRentalResponse"/>
     <fullyQualifiedTypeName name="feign.Response"/>
-    <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.DeleteMapping"/>
     <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.PathVariable"/>
     <fullyQualifiedTypeName name="javax.validation.Valid"/>
     <fullyQualifiedTypeName name="javax.validation.constraints.Max"/>
@@ -49,15 +47,17 @@
     <fullyQualifiedTypeName name="javax.validation.constraints.NotNull"/>
     <fullyQualifiedTypeName name="org.springframework.stereotype.Service"/>
     <fullyQualifiedTypeName name="com.kodlamaio.paymentservice.business.adapters.PosCheckService"/>
-    <fullyQualifiedTypeName name="com.kodlamaio.common.utilities.results.Result"/>
-    <fullyQualifiedTypeName name="com.kodlamaio.common.utilities.results.SuccessResult"/>
     <fullyQualifiedTypeName name="com.kodlamaio.paymentservice.business.contants.Messages"/>
     <fullyQualifiedTypeName name="com.kodlamaio.filterService.business.responses.get.GetFiltersResponse"/>
-    <fullyQualifiedTypeName name="com.kodlamaio.common.utilities.results.SuccessDataResult"/>
     <fullyQualifiedTypeName name="com.kodlamaio.filterService.business.responses.get.GetAllFiltersResponse"/>
     <fullyQualifiedTypeName name="com.kodlamaio.filterService.business.constants.Messages"/>
     <fullyQualifiedTypeName name="java.util.List"/>
-    <fullyQualifiedTypeName name="com.kodlamaio.common.utilities.results.DataResult"/>
-    <fullyQualifiedTypeName name="org.springframework.http.ResponseEntity"/>
     <fullyQualifiedTypeName name="javax.persistence.Column"/>
+    <fullyQualifiedTypeName name="com.kodlamaio.common.utilities.results.SuccessResult"/>
+    <fullyQualifiedTypeName name="com.kodlamaio.common.utilities.results.Result"/>
+    <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.DeleteMapping"/>
+    <fullyQualifiedTypeName name="org.springframework.http.ResponseEntity"/>
+    <fullyQualifiedTypeName name="com.kodlamaio.common.utilities.results.SuccessDataResult"/>
+    <fullyQualifiedTypeName name="com.kodlamaio.common.utilities.results.DataResult"/>
+    <fullyQualifiedTypeName name="com.kodlamaio.paymentservice.business.responses.CreatePaymentResponse"/>
 </qualifiedTypeNameHistroy>

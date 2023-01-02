@@ -1,7 +1,5 @@
 package com.kodlamaio.paymentservice.entities;
 
-import java.time.LocalDate;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -31,10 +29,10 @@ public class Payment {
 	private String cardHolder;
 
 	@Column(name = "cvv")
-	private int cvv;
+	private String cvv;
 
 	@Column(name = "cardDate")
-	private LocalDate cardDate;
+	private String cardDate;
 
 	@Column(name = "balance")
 	private double balance;

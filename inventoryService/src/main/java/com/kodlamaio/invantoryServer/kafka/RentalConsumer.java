@@ -28,8 +28,8 @@ public class RentalConsumer {
 	@KafkaListener(topics = "rental-updated", groupId = "update")
 	public void consume(RentalUpdateEvent event) {
 		LOGGER.info(String.format("Order event received in stock service => %s", event.toString()));
-		carService.updateCarState(event.getCarOldId(),1);
-		carService.updateCarState(event.getCarNewId(),3);
+		carService.updateCarState(event.getOldCarId(),1);
+		carService.updateCarState(event.getNewCarId(),3);
 
 		// save the order event into the database
 	}

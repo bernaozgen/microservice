@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import com.kodlamaio.common.events.rentals.RentalCreatedEvent;
+import com.kodlamaio.common.events.rentals.RentalUpdateEvent;
 import com.kodlamaio.common.rentalPayment.PayMoneyRequest;
 import com.kodlamaio.common.utilities.exceptions.BusinessException;
 import com.kodlamaio.common.utilities.mapping.ModelMapperService;
@@ -58,7 +59,7 @@ public class RentalManager implements RentalService {
 		payMoneyRequest.setBalance(createRentalRequest.getBalance());
 
 		paymentClient.add(payMoneyRequest);
-		 rental.setCondition(1);// satış gerçekleşti id si
+		rental.setCondition(1);// satış gerçekleşti id si
 		Rental rentalCreated = this.rentalRepository.save(rental);
 
 		RentalCreatedEvent rentalCreatedEvent = new RentalCreatedEvent();
@@ -69,37 +70,32 @@ public class RentalManager implements RentalService {
 
 		CreateRentalResponse createRentalResponse = this.modelMapperService.forResponse().map(rental,
 				CreateRentalResponse.class);
-		return new SuccessDataResult<CreateRentalResponse>(createRentalResponse,Messages.RentalCreated);
+		return new SuccessDataResult<CreateRentalResponse>(createRentalResponse, Messages.RentalCreated);
 	}
 
 	@Override
 	public DataResult<UpdateRentalResponse> update(UpdateRentalRequest updateRentalRequest) {
-		
+		checkIfRentalExistsId(updateRentalRequest.getId());
+		RentalUpdateEvent rentalUpdatedEvent = new RentalUpdateEvent();
 
-		Rental rental = this.rentalRepository.findByCarId(updateRentalRequest.getId());
+		Rental rental = this.rentalRepository.findById(updateRentalRequest.getId()).get();
+		rentalUpdatedEvent.setOldCarId(rental.getCarId());
+
+		// this.modelMapperService.forRequest().map(updateRentalRequest, Rental.class);
 		rental.setCarId(updateRentalRequest.getCarId());
-		rental.setDateStarted(LocalDateTime.now());
 		rental.setDailyPrice(updateRentalRequest.getDailyPrice());
 		rental.setRentedForDays(updateRentalRequest.getRentedForDays());
+		rental.setDateStarted(LocalDateTime.now());
 		double totalPrice = updateRentalRequest.getDailyPrice() * updateRentalRequest.getRentedForDays();
 		rental.setTotalPrice(totalPrice);
+
 		Rental rentalUpdated = this.rentalRepository.save(rental);
-
-		/*RentalUpdateEvent rentalUpdateEvent = new RentalUpdateEvent();
-
-		rentalUpdateEvent.setCarNewId(updateRentalRequest.getOldCarId());
-		rentalUpdateEvent.setCarNewId(updateRentalRequest.getNewCarId());
-		rentalUpdateEvent.setMessage("Rental Updated");
-
-		this.rentalProducer.sendMessage(rentalUpdateEvent);*/
 
 		UpdateRentalResponse updateRentalResponse = this.modelMapperService.forResponse().map(rentalUpdated,
 				UpdateRentalResponse.class);
-		//updateRentalResponse.setCarId(rentalUpdated.getCarId());
 
-		return new SuccessDataResult<UpdateRentalResponse>(updateRentalResponse,Messages.RentalUpdated);
+		return new SuccessDataResult<UpdateRentalResponse>(updateRentalResponse, Messages.RentalUpdated);
 	}
-
 
 	@Override
 	public void setConditionByPayment(String id) {// araba alındıktan sonra durumunu boşa cıkartıyor
@@ -117,23 +113,28 @@ public class RentalManager implements RentalService {
 		List<GetAllRentalResponse> getAllRentalResponses = rentals.stream()
 				.map(rental -> this.modelMapperService.forResponse().map(rental, GetAllRentalResponse.class))
 				.collect(Collectors.toList());
-		return new SuccessDataResult<List<GetAllRentalResponse>>(getAllRentalResponses,Messages.RentalListed);
+		return new SuccessDataResult<List<GetAllRentalResponse>>(getAllRentalResponses, Messages.RentalListed);
 	}
 
 	@Override
 	public Result delete(String id) {
+		checkIfRentalExistsId(id);
 		this.rentalRepository.deleteById(id);
 		return new SuccessResult(Messages.RentalDeleted);
 	}
-	
+
 	private void checkIfRentalExistsState(String carId) {// arabanın kiralanıp kiralanmadığı kontrolü
 		GetCarResponse getCarResponse = inventoryClient.getById(carId);
-		if (getCarResponse.getState() ==1) {// kiralanmış arabaysa  
+		if (getCarResponse.getState() == 1) {// kiralanmış arabaysa
 			throw new BusinessException(Messages.CarHired);
 		}
 	}
-	
-	
 
+	private void checkIfRentalExistsId(String id) {
+		Rental rental = this.rentalRepository.findById(id).get();
+		if (rental == null) {
+			throw new BusinessException(Messages.RentalIdNotFound);
+		}
+	}
 
 }

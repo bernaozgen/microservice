@@ -7,5 +7,6 @@ public class Messages {
 	public static final String RentalListed = "Rental Listed";
 	public static final String RentalDeleted = "Rental Deleted";
 	public static final String CarHired = "This Car Has Been Rented";
+	public static final String RentalIdNotFound = "Rental Id Not Found";
 
 }
