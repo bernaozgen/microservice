@@ -1,5 +1,7 @@
 package com.kodlamaio.invoicesercive.business.responses;
 
+import java.time.LocalDate;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,11 +11,22 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CreateInvoiceResponse {
 	private String id;
-	private String paymentId;
-	private String rentalId;
-	private String customerFirstName;
-	private String customerLastName;
-	private double tax;
+
+	private String carId;
+
+	private String fullName;
+
+	private String modelName;
+
+	private String brandName;
+
+	private int modelYear;
+
+	private double dailyPrice;
+
 	private double totalPrice;
-	private String adress;
+
+	private int rentedForDays;
+
+	private LocalDate rentedDate;
 }

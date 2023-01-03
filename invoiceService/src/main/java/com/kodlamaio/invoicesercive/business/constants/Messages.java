@@ -7,6 +7,6 @@ public class Messages {
 	public static final String InvoiceUpdated = "Invoice Updated";
 	public static final String InvoiceListed = "Invoice Listed";
 	public static final String InvoiceIdNotFound = "Invoice ID Not Found";
-	public static final String PaymentIdNotFound = "Payment Id Not Found";
+	public static final String CarIdNotFound = "Car Id Not Found";
 
 }

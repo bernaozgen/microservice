@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import com.kodlamaio.common.events.invoice.InvoiceCreatedEvent;
 import com.kodlamaio.common.utilities.exceptions.BusinessException;
 import com.kodlamaio.common.utilities.mapping.ModelMapperService;
 import com.kodlamaio.common.utilities.results.DataResult;
@@ -23,7 +22,6 @@ import com.kodlamaio.invoicesercive.business.responses.GetInvoiceResponse;
 import com.kodlamaio.invoicesercive.business.responses.UpdateInvoiceResponse;
 import com.kodlamaio.invoicesercive.dataAccess.InvoiceRepository;
 import com.kodlamaio.invoicesercive.entities.Invoice;
-import com.kodlamaio.invoicesercive.kafka.InvoiceProducer;
 
 import lombok.AllArgsConstructor;
 
@@ -32,20 +30,16 @@ import lombok.AllArgsConstructor;
 public class InvoiceManager implements InvoiceService {
 	private InvoiceRepository invoiceRepository;
 	private ModelMapperService modelMapperService;
-	private InvoiceProducer invoiceProducer;
+	
 
 	public DataResult<CreateInvoiceResponse> add(CreateInvoiceRequest createInvoiceRequest) {
-		checkIfPaymentExistsById(createInvoiceRequest.getPaymentId());
+		checkIfCarExistsById(createInvoiceRequest.getCarId());
 		Invoice invoice = this.modelMapperService.forRequest().map(createInvoiceRequest, Invoice.class);
 		invoice.setId(UUID.randomUUID().toString());
 
-		Invoice invoice2 =this.invoiceRepository.save(invoice);
+		this.invoiceRepository.save(invoice);
 
-		InvoiceCreatedEvent invoiceCreatedEvent = new InvoiceCreatedEvent();
-		invoiceCreatedEvent.setPeymantId(invoice2.getPaymentId());
-		invoiceCreatedEvent.setMessage("Payment created");
-
-		this.invoiceProducer.sendMessage(invoiceCreatedEvent);
+		
 
 		CreateInvoiceResponse response = this.modelMapperService.forResponse().map(invoice,
 				CreateInvoiceResponse.class);
@@ -63,7 +57,7 @@ public class InvoiceManager implements InvoiceService {
 	@Override
 	public DataResult<UpdateInvoiceResponse> update(UpdateInvoiceRequest invoiceRequest) {
 		checkIfInvoiceExistsById(invoiceRequest.getId());
-		checkIfPaymentExistsById(invoiceRequest.getPaymentId());
+		checkIfCarExistsById(invoiceRequest.getCarId());
 		Invoice invoice = this.modelMapperService.forRequest().map(invoiceRequest, Invoice.class);
 		invoice.setId(UUID.randomUUID().toString());
 		this.invoiceRepository.save(invoice);
@@ -90,6 +84,12 @@ public class InvoiceManager implements InvoiceService {
 				GetInvoiceResponse.class);
 		return new SuccessDataResult<GetInvoiceResponse>(getInvoiceResponse, Messages.InvoiceListed);
 	}
+	@Override
+	public void createInvoice(Invoice invoice) {
+		invoice.setId(UUID.randomUUID().toString());
+		invoiceRepository.save(invoice);
+		
+	}
 	
 	private void checkIfInvoiceExistsById(String id) {
 		Invoice invoice=this.invoiceRepository.findById(id).get();
@@ -97,10 +97,10 @@ public class InvoiceManager implements InvoiceService {
 			throw new BusinessException(Messages.InvoiceIdNotFound);
 		}		
 	}
-	private void checkIfPaymentExistsById(String paymentId) {
-		Invoice invoice=this.invoiceRepository.findById(paymentId).get();
+	private void checkIfCarExistsById(String carId) {
+		Invoice invoice=this.invoiceRepository.findById(carId).get();
 		if(invoice==null) {
-			throw new BusinessException(Messages.PaymentIdNotFound);
+			throw new BusinessException(Messages.CarIdNotFound);
 		}
 	}
 	

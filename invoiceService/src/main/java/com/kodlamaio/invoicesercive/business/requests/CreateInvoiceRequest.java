@@ -1,5 +1,7 @@
 package com.kodlamaio.invoicesercive.business.requests;
 
+import java.time.LocalDate;
+
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -11,17 +13,21 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateInvoiceRequest {
-	@NotNull
-	@NotEmpty
-	private String paymentId;
-	@NotEmpty
-	private String customerFirstName;
-	@NotEmpty
-	private String customerLastName;
-	@NotNull
-	private double tax;
-	@NotNull
+	private String carId;
+
+	private String fullName;
+
+	private String modelName;
+
+	private String brandName;
+
+	private int modelYear;
+
+	private double dailyPrice;
+
 	private double totalPrice;
-	@NotEmpty
-	private String adress;
+
+	private int rentedForDays;
+
+	private LocalDate rentedDate;
 }

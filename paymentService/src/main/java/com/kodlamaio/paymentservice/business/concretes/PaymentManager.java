@@ -4,7 +4,6 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
-import com.kodlamaio.common.events.payments.PaymentCreatedEvent;
 import com.kodlamaio.common.utilities.exceptions.BusinessException;
 import com.kodlamaio.common.utilities.mapping.ModelMapperService;
 import com.kodlamaio.common.utilities.results.DataResult;
@@ -18,7 +17,6 @@ import com.kodlamaio.paymentservice.business.requests.CreatePaymentRequest;
 import com.kodlamaio.paymentservice.business.responses.CreatePaymentResponse;
 import com.kodlamaio.paymentservice.dataAccess.PaymentRepository;
 import com.kodlamaio.paymentservice.entities.Payment;
-import com.kodlamaio.paymentservice.kafka.PaymentProducer;
 
 import lombok.AllArgsConstructor;
 
@@ -27,47 +25,44 @@ import lombok.AllArgsConstructor;
 public class PaymentManager implements PaymentService {
 	private PaymentRepository paymentRepository;
 	private ModelMapperService modelMapperService;
-	private PaymentProducer paymentProducer;
 	private PosCheckService posCheckService;
 
 	@Override
 	public DataResult<CreatePaymentResponse> add(CreatePaymentRequest createPaymentRequest) {
-//		checkIfBalanceUnderTotalPrice(createPaymentRequest.getTotalPrice(), createPaymentRequest.getBalance());
+		// sisteme card bilgilerini kaydediyoruz
 		Payment payment = this.modelMapperService.forRequest().map(createPaymentRequest, Payment.class);
 		payment.setId(UUID.randomUUID().toString());
-//		posCheckService.pay();
 		this.paymentRepository.save(payment);
-		
-		PaymentCreatedEvent paymentCreatedEvent = new PaymentCreatedEvent();
-		paymentCreatedEvent.setRentalId(createPaymentRequest.getRentalId());
-		paymentCreatedEvent.setMessage("Payment Created");
-
-		this.paymentProducer.sendMessage(paymentCreatedEvent);
-		CreatePaymentResponse createPaymentResponse=this.modelMapperService.forResponse().map(payment, CreatePaymentResponse.class); 
-		
+		CreatePaymentResponse createPaymentResponse = this.modelMapperService.forResponse().map(payment,
+				CreatePaymentResponse.class);
 		return new SuccessDataResult<CreatePaymentResponse>(createPaymentResponse, Messages.PaymentCreated);
+	}
 
+	private void checkIfRentalBalance(String cardNo, String cardHolder, String cvv, double totalPrice) {
+		Payment payment = this.paymentRepository.findByCardNoAndCardHolderAndCvv(cardNo, cardHolder, cvv);
+		if (payment == null) {
+			throw new BusinessException(Messages.InvalidPayment);
+		}
+		double amount = this.paymentRepository.findByCardNo(cardNo).getBalance();
+		if (amount < totalPrice) {
+			throw new BusinessException(Messages.InsufficientBalance);
+		}
+		posCheckService.pay();
+		Payment payment2 = this.paymentRepository.findByCardNo(cardNo);
+		payment2.setBalance(amount - totalPrice);
+		this.paymentRepository.save(payment2);
 	}
 
 	@Override
-	public void updateStatus(String id, int status) {
-		Payment payment = this.paymentRepository.findById(id).get();
-		payment.setStatus(status);
-		paymentRepository.save(payment);
-		
+	public void paymentReceived(String cardNumber, String cardName, String cvv, double totalPrice) {
+		checkIfRentalBalance(cardNumber, cardName, cvv, totalPrice);// card bilgisi kontrol ve ödeme işlemi
+
 	}
 
 	@Override
 	public Result delete(String id) {
 		paymentRepository.deleteById(id);
 		return new SuccessResult(Messages.PaymentDeleted);
-	}
-
-	private void checkIfBalanceUnderTotalPrice(double totalPrice, double balance) {
-		if (balance < totalPrice) {
-			throw new BusinessException("insufficient balance");
-		}
-
 	}
 
 }

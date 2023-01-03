@@ -19,14 +19,6 @@ public class CreateRentalRequest {
 	@NotNull
 	private double dailyPrice;
 	@NotNull
-	@NotEmpty
-	private String cardNo;
-	@NotEmpty
-	@NotNull
-	private String cardHolder;
-	@NotNull
-	private double balance;
-	@NotNull
 	private int condition;
 
 }

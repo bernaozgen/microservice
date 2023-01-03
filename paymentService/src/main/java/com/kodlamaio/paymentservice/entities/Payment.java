@@ -19,9 +19,6 @@ public class Payment {
 	@Column(name = "id")
 	private String id;
 
-	@Column(name = "rentalId")
-	private String rentalId;
-
 	@Column(name = "cardNo")
 	private String cardNo;
 
@@ -37,9 +34,4 @@ public class Payment {
 	@Column(name = "balance")
 	private double balance;
 
-	@Column(name = "total_price")
-	private double totalPrice;
-
-	@Column(name = "status")
-	private int status;
 }

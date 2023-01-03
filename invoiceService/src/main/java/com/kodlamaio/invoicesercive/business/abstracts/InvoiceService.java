@@ -10,6 +10,7 @@ import com.kodlamaio.invoicesercive.business.responses.CreateInvoiceResponse;
 import com.kodlamaio.invoicesercive.business.responses.GetAllInvoiceResponse;
 import com.kodlamaio.invoicesercive.business.responses.GetInvoiceResponse;
 import com.kodlamaio.invoicesercive.business.responses.UpdateInvoiceResponse;
+import com.kodlamaio.invoicesercive.entities.Invoice;
 
 public interface InvoiceService {
 	DataResult<CreateInvoiceResponse> add(CreateInvoiceRequest createInvoiceRequest);
@@ -21,5 +22,7 @@ public interface InvoiceService {
 	DataResult<List<GetAllInvoiceResponse>> getAll();
 
 	DataResult<GetInvoiceResponse> getById(String id);
+
+	public void createInvoice(Invoice invoice);
 
 }

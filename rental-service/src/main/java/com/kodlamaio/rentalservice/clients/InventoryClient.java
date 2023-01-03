@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.kodlamaio.invantoryServer.business.responses.get.GetCarResponse;
+import com.kodlamaio.rentalservice.business.responses.get.GetAllCarResponse;
 
 import feign.Headers;
 
@@ -13,6 +13,6 @@ import feign.Headers;
 public interface InventoryClient {
 	@RequestMapping(method=RequestMethod.GET , value = "stock/api/cars/{carId}")
     @Headers(value = "Content-Type: application/json")
-    GetCarResponse getById(@PathVariable String carId);
+	GetAllCarResponse getByCarId(@PathVariable String carId);
 
 }

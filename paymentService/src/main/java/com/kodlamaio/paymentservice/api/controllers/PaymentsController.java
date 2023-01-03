@@ -4,6 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kodlamaio.common.utilities.results.DataResult;
@@ -27,6 +28,14 @@ public class PaymentsController {
 			return ResponseEntity.ok(result);
 		}
 		return ResponseEntity.badRequest().body(result);
+	}
+
+	@PostMapping("/received")
+	public void paymentReceived(@RequestParam String cardNo, @RequestParam String cardHolder, @RequestParam String cvv,
+			@RequestParam double totalPrice) {
+
+		paymentService.paymentReceived(cardNo, cardHolder, cvv, totalPrice);
+
 	}
 
 	@DeleteMapping("/{id}")

@@ -1,6 +1,6 @@
 package com.kodlamaio.rentalservice.entities;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,7 +23,7 @@ public class Rental {
 	@Column(name = "carId")
 	private String carId;
 	@Column(name = "dateStarted")
-	private LocalDateTime dateStarted;
+	private LocalDate dateStarted = LocalDate.now();
 	@Column(name = "rentedForDays")
 	private int rentedForDays;
 	@Column(name = "dailyPrice")

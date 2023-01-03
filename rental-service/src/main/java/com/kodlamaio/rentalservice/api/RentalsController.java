@@ -12,11 +12,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kodlamaio.common.utilities.results.DataResult;
 import com.kodlamaio.common.utilities.results.Result;
 import com.kodlamaio.rentalservice.business.abstracts.RentalService;
+import com.kodlamaio.rentalservice.business.requests.created.CreatePaymentRequest;
 import com.kodlamaio.rentalservice.business.requests.created.CreateRentalRequest;
 import com.kodlamaio.rentalservice.business.requests.updated.UpdateRentalRequest;
 import com.kodlamaio.rentalservice.business.responses.created.CreateRentalResponse;
@@ -32,8 +34,13 @@ public class RentalsController {
 	private RentalService rentalService;
 
 	@PostMapping
-	public ResponseEntity<?> add(@RequestBody @Valid CreateRentalRequest createRentalRequest) {
-		DataResult<CreateRentalResponse> result = this.rentalService.add(createRentalRequest);
+	public ResponseEntity<?> add(@RequestBody @Valid CreateRentalRequest createRentalRequest,@RequestParam String cardNo, @RequestParam String cardHolder,
+            @RequestParam String cvv) {
+		CreatePaymentRequest createPaymentRequest = new CreatePaymentRequest();
+		createPaymentRequest.setCardHolder(cardHolder);
+		createPaymentRequest.setCardNo(cardNo);
+		createPaymentRequest.setCvv(cvv);
+		DataResult<CreateRentalResponse> result = this.rentalService.add(createRentalRequest,createPaymentRequest);
 		if (result.isSuccess()) {
 			return ResponseEntity.ok(result);
 		}
