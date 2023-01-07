@@ -14,11 +14,11 @@ public class InvoiceCreatedEvent {
 
 	private String fullName;
 
-	private String modelName;
-
-	private String brandName;
-
-	private int modelYear;
+//	private String modelName;
+//
+//	private String brandName;
+//
+//	private int modelYear;
 
 	private double dailyPrice;
 

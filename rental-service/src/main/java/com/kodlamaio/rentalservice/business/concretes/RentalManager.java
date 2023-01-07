@@ -21,8 +21,8 @@ import com.kodlamaio.rentalservice.business.requests.created.CreatePaymentReques
 import com.kodlamaio.rentalservice.business.requests.created.CreateRentalRequest;
 import com.kodlamaio.rentalservice.business.requests.updated.UpdateRentalRequest;
 import com.kodlamaio.rentalservice.business.responses.created.CreateRentalResponse;
-import com.kodlamaio.rentalservice.business.responses.get.GetAllCarResponse;
 import com.kodlamaio.rentalservice.business.responses.get.GetAllRentalResponse;
+import com.kodlamaio.rentalservice.business.responses.get.GetCarResponse;
 import com.kodlamaio.rentalservice.business.responses.updated.UpdateRentalResponse;
 import com.kodlamaio.rentalservice.clients.InventoryClient;
 import com.kodlamaio.rentalservice.clients.PaymentClient;
@@ -47,7 +47,7 @@ public class RentalManager implements RentalService {
 	public DataResult<CreateRentalResponse> add(CreateRentalRequest createRentalRequest,
 			CreatePaymentRequest createPaymentRequest) {
 
-		//checkIfRentalExistsState(createRentalRequest.getCarId());
+	    checkIfRentalExistsState(createRentalRequest.getCarId());
 		Rental rental = this.modelMapperService.forRequest().map(createRentalRequest, Rental.class);
 		rental.setId(UUID.randomUUID().toString());
 		double totalPrice = createRentalRequest.getDailyPrice() * createRentalRequest.getRentedForDays();
@@ -56,20 +56,19 @@ public class RentalManager implements RentalService {
 		paymentClient.paymentReceived(createPaymentRequest.getCardNo(), createPaymentRequest.getCardHolder(),
 				createPaymentRequest.getCvv(), createPaymentRequest.getCardDate(), rental.getTotalPrice());
 
-		Rental rentalCreated = this.rentalRepository.save(rental);
-		rental.setCondition(1);// satış gerçekleşti id si
-		RentalCreatedEvent rentalCreatedEvent = new RentalCreatedEvent();
-		rentalCreatedEvent.setCarId(rentalCreated.getCarId());
-		rentalCreatedEvent.setMessage("Rental Created");
+		 this.rentalRepository.save(rental);
 
+		RentalCreatedEvent rentalCreatedEvent = new RentalCreatedEvent();
+		rentalCreatedEvent.setCarId(createRentalRequest.getCarId());
+		rentalCreatedEvent.setMessage("Rental Created");
 		this.rentalProducer.sendMessage(rentalCreatedEvent);
 
 		InvoiceCreatedEvent invoiceCreatedEvent = new InvoiceCreatedEvent();
 		invoiceCreatedEvent.setCarId(rental.getCarId());
 		invoiceCreatedEvent.setFullName(createPaymentRequest.getCardHolder());
-		invoiceCreatedEvent.setDailyPrice(rental.getDailyPrice());
+		invoiceCreatedEvent.setDailyPrice(createRentalRequest.getDailyPrice());
 		invoiceCreatedEvent.setTotalPrice(rental.getTotalPrice());
-		invoiceCreatedEvent.setRentedForDays(rental.getRentedForDays());
+		invoiceCreatedEvent.setRentedForDays(createRentalRequest.getRentedForDays());
 		invoiceCreatedEvent.setRentedDate(rental.getDateStarted());
 		invoiceProducer.sendMessage(invoiceCreatedEvent);
 
@@ -104,16 +103,6 @@ public class RentalManager implements RentalService {
 	}
 
 	@Override
-	public void setConditionByPayment(String id) {// araba alındıktan sonra durumunu boşa cıkartıyor
-		Rental rental = this.rentalRepository.findById(id).get();
-		if (rental.getCondition() == 1) {
-			rental.setCondition(2);
-		}
-		this.rentalRepository.save(rental);
-
-	}
-
-	@Override
 	public DataResult<List<GetAllRentalResponse>> getAll() {
 		List<Rental> rentals = this.rentalRepository.findAll();
 		List<GetAllRentalResponse> getAllRentalResponses = rentals.stream()
@@ -130,8 +119,8 @@ public class RentalManager implements RentalService {
 	}
 
 	private void checkIfRentalExistsState(String carId) {// arabanın kiralanıp kiralanmadığı kontrolü
-		GetAllCarResponse getCarResponse = inventoryClient.getByCarId(carId);
-		if (getCarResponse.getState() != 1) {// kiralanmış arabaysa
+		GetCarResponse getCarResponse = inventoryClient.getByCarId(carId);
+		if (getCarResponse.getState() == 2) {// kiralanmış arabaysa
 			throw new BusinessException(Messages.CarHired);
 		}
 	}

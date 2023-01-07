@@ -54,8 +54,8 @@ public class PaymentManager implements PaymentService {
 	}
 
 	@Override
-	public void paymentReceived(String cardNumber, String cardName, String cvv, double totalPrice) {
-		checkIfRentalBalance(cardNumber, cardName, cvv, totalPrice);// card bilgisi kontrol ve ödeme işlemi
+	public void paymentReceived(String cardNo, String cardHolder, String cvv, double balance) {
+		checkIfRentalBalance(cardNo, cardHolder, cvv, balance);// card bilgisi kontrol ve ödeme işlemi
 
 	}
 

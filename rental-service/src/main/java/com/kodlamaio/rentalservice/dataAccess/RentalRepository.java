@@ -7,4 +7,5 @@ import com.kodlamaio.rentalservice.entities.Rental;
 public interface RentalRepository extends JpaRepository<Rental, String> {
 	Rental findByCarId(String carId);
 
+
 }

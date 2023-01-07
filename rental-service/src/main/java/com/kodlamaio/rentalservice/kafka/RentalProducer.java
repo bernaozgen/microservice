@@ -29,7 +29,7 @@ public class RentalProducer {// produsur consumera gönderiyor
 		LOGGER.info(String.format("Rental created event => %s", rentalCreatedEvent.toString()));
 
 		Message<RentalCreatedEvent> message = MessageBuilder.withPayload(rentalCreatedEvent)// mesaj+data gönderiyorum
-				.setHeader(KafkaHeaders.TOPIC, topic.name()).build();// kullandığımız topikleri gönderiyoruz
+				.setHeader(KafkaHeaders.TOPIC, "rental-created").build();// kullandığımız topikleri gönderiyoruz
 
 		kafkaCreatedTemplate.send(message);
 	}
@@ -38,7 +38,7 @@ public class RentalProducer {// produsur consumera gönderiyor
 		LOGGER.info(String.format("Rental created event => %s", rentalUpdateEvent.toString()));
 
 		Message<RentalUpdateEvent> message = MessageBuilder.withPayload(rentalUpdateEvent)// mesaj+data gönderiyorum
-				.setHeader(KafkaHeaders.TOPIC, topic.name()).build();// kullandığımız topikleri gönderiyoruz
+				.setHeader(KafkaHeaders.TOPIC, "rental-updated").build();// kullandığımız topikleri gönderiyoruz
 
 		kafkaUpdatedTemplate.send(message);
 	}

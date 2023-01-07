@@ -11,5 +11,3 @@ public class RentalCreatedEvent {
 	private String message;
 	private String carId;
 }
-///aldığım aracın id sini gönderiyoruz state degişmek için kullanıyoruz. 
-//EVENT olayı burası

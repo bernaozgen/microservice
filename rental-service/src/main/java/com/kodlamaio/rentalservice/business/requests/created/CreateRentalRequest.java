@@ -18,7 +18,6 @@ public class CreateRentalRequest {
 	private int rentedForDays;
 	@NotNull
 	private double dailyPrice;
-	@NotNull
-	private int condition;
+
 
 }

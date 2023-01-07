@@ -20,6 +20,6 @@ public interface RentalService {
 
 	Result delete (String id);
 	
-	void setConditionByPayment(String id);
+	//void setConditionByPayment(String id);
 
 }
