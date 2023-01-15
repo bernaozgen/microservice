@@ -14,17 +14,17 @@ public class GetAllFiltersResponse {
 
 	private String brandId;
 
-	private String brandName;
-
 	private String modelId;
 
+	private String brandName;
+
 	private String modelName;
+
+	private String plate;
 
 	private double dailyPrice;
 
 	private int modelYear;
-
-	private String plate;
 
 	private int state;
 }
