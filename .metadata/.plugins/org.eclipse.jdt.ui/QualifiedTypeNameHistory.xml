@@ -1,21 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-    <fullyQualifiedTypeName name="com.kodlamaio.paymentservice.business.abstracts.PaymentService"/>
-    <fullyQualifiedTypeName name="com.kodlamaio.invoicesercive.business.constants.Messages"/>
-    <fullyQualifiedTypeName name="com.kodlamaio.common.utilities.exceptions.BusinessException"/>
-    <fullyQualifiedTypeName name="com.kodlamaio.paymentservice.business.adapters.PosCheckService"/>
-    <fullyQualifiedTypeName name="com.kodlamaio.paymentservice.business.contants.Messages"/>
-    <fullyQualifiedTypeName name="com.kodlamaio.filterService.business.responses.get.GetFiltersResponse"/>
     <fullyQualifiedTypeName name="com.kodlamaio.filterService.business.responses.get.GetAllFiltersResponse"/>
     <fullyQualifiedTypeName name="com.kodlamaio.filterService.business.constants.Messages"/>
     <fullyQualifiedTypeName name="java.util.List"/>
     <fullyQualifiedTypeName name="javax.persistence.Column"/>
-    <fullyQualifiedTypeName name="com.kodlamaio.common.utilities.results.SuccessResult"/>
-    <fullyQualifiedTypeName name="com.kodlamaio.common.utilities.results.Result"/>
-    <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.DeleteMapping"/>
-    <fullyQualifiedTypeName name="org.springframework.http.ResponseEntity"/>
     <fullyQualifiedTypeName name="com.kodlamaio.common.utilities.results.SuccessDataResult"/>
-    <fullyQualifiedTypeName name="com.kodlamaio.common.utilities.results.DataResult"/>
     <fullyQualifiedTypeName name="com.kodlamaio.paymentservice.business.responses.CreatePaymentResponse"/>
     <fullyQualifiedTypeName name="com.kodlamaio.invoicesercive.business.abstracts.InvoiceService"/>
     <fullyQualifiedTypeName name="com.kodlamaio.rentalservice.kafka.InvoiceProducer"/>
@@ -29,7 +18,6 @@
     <fullyQualifiedTypeName name="com.kodlamaio.rentalservice.business.responses.get.GetCarResponse"/>
     <fullyQualifiedTypeName name="com.kodlamaio.rentalservice.business.responses.get.GetAllCarResponse"/>
     <fullyQualifiedTypeName name="org.springframework.cloud.openfeign.FeignClient"/>
-    <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.RequestBody"/>
     <fullyQualifiedTypeName name="com.kodlamaio.rentalservice.entities.Rental"/>
     <fullyQualifiedTypeName name="org.springframework.context.annotation.Configuration"/>
     <fullyQualifiedTypeName name="org.springframework.beans.factory.annotation.Value"/>
@@ -48,11 +36,9 @@
     <fullyQualifiedTypeName name="lombok.NoArgsConstructor"/>
     <fullyQualifiedTypeName name="com.kodlamaio.invantoryServer.entites.Car"/>
     <fullyQualifiedTypeName name="com.kodlamaio.invantoryServer.business.constants.Messages"/>
-    <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.PathVariable"/>
     <fullyQualifiedTypeName name="org.springframework.stereotype.Service"/>
     <fullyQualifiedTypeName name="com.kodlamaio.invoiceservice.business.constants.Messages"/>
     <fullyQualifiedTypeName name="org.springframework.kafka.annotation.EnableKafka"/>
-    <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.GetMapping"/>
     <fullyQualifiedTypeName name="lombok.AllArgsConstructor"/>
     <fullyQualifiedTypeName name="com.kodlamaio.inventoryService.business.constants.Messages"/>
     <fullyQualifiedTypeName name="javax.validation.constraints.Min"/>
@@ -60,4 +46,18 @@
     <fullyQualifiedTypeName name="javax.validation.constraints.NotEmpty"/>
     <fullyQualifiedTypeName name="javax.validation.constraints.NotNull"/>
     <fullyQualifiedTypeName name="java.time.LocalDate"/>
+    <fullyQualifiedTypeName name="com.kodlamaio.common.utilities.results.Result"/>
+    <fullyQualifiedTypeName name="com.kodlamaio.common.utilities.results.SuccessResult"/>
+    <fullyQualifiedTypeName name="com.kodlamaio.invoiceservice.business.responses.GetAllInvoiceResponse"/>
+    <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.DeleteMapping"/>
+    <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.PutMapping"/>
+    <fullyQualifiedTypeName name="com.kodlamaio.invoiceservice.business.requests.UpdateInvoiceRequest"/>
+    <fullyQualifiedTypeName name="com.kodlamaio.invoiceservice.business.responses.UpdateInvoiceResponse"/>
+    <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.GetMapping"/>
+    <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.PathVariable"/>
+    <fullyQualifiedTypeName name="com.kodlamaio.common.utilities.results.DataResult"/>
+    <fullyQualifiedTypeName name="com.kodlamaio.invoiceservice.business.responses.GetInvoiceResponse"/>
+    <fullyQualifiedTypeName name="org.springframework.http.ResponseEntity"/>
+    <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.RequestBody"/>
+    <fullyQualifiedTypeName name="javax.validation.Valid"/>
 </qualifiedTypeNameHistroy>

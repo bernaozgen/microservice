@@ -14,5 +14,9 @@ public class CarCreatedEvent {
 	private String modelId;
 	private String brandName;
 	private String modelName;
-	
+	private String plate;
+	private int modelYear;
+	private int state;
+	private double dailyPrice;
+
 }
