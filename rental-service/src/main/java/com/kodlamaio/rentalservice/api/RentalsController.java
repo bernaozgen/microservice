@@ -23,9 +23,7 @@ import com.kodlamaio.rentalservice.business.requests.created.CreateRentalRequest
 import com.kodlamaio.rentalservice.business.requests.updated.UpdateRentalRequest;
 import com.kodlamaio.rentalservice.business.responses.created.CreateRentalResponse;
 import com.kodlamaio.rentalservice.business.responses.get.GetAllRentalResponse;
-import com.kodlamaio.rentalservice.business.responses.get.GetCarResponse;
 import com.kodlamaio.rentalservice.business.responses.updated.UpdateRentalResponse;
-import com.kodlamaio.rentalservice.clients.InventoryClient;
 
 import lombok.AllArgsConstructor;
 

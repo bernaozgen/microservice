@@ -42,7 +42,7 @@ public class BrandManager implements BrandService {
 				.map(brand -> this.modelMapperService.forResponse().map(brand, GetAllBrandResponse.class))
 				.collect(Collectors.toList());
 
-		return new SuccessDataResult<List<GetAllBrandResponse>>(response,Messages.BrandListed);
+		return new SuccessDataResult<List<GetAllBrandResponse>>(response, Messages.BrandListed);
 	}
 
 	@Override
@@ -55,7 +55,7 @@ public class BrandManager implements BrandService {
 
 		CreateBrandResponse createBrandResponse = this.modelMapperService.forResponse().map(brand,
 				CreateBrandResponse.class);
-		return new SuccessDataResult<CreateBrandResponse>(createBrandResponse,Messages.BrandCreated);
+		return new SuccessDataResult<CreateBrandResponse>(createBrandResponse, Messages.BrandCreated);
 	}
 
 	@Override
@@ -73,23 +73,24 @@ public class BrandManager implements BrandService {
 		this.inventoryProducer.sendMessage(brandUpdateEvent);
 		UpdateBrandResponse updateBrandResponse = this.modelMapperService.forResponse().map(brand,
 				UpdateBrandResponse.class);
-		return new SuccessDataResult<UpdateBrandResponse>(updateBrandResponse,Messages.BrandUpdated);
+		return new SuccessDataResult<UpdateBrandResponse>(updateBrandResponse, Messages.BrandUpdated);
 	}
 
 	@Override
 	public Result delete(String id) {
 		checkIfBrandExistsById(id);
 		this.brandRepository.deleteById(id);
-        return new SuccessResult(Messages.BrandDeleted);
+		return new SuccessResult(Messages.BrandDeleted);
 	}
 
 	@Override
 	public DataResult<GetBrandResponse> getById(String id) {
+		checkIfBrandExistsById(id);
 		Brand brand = this.brandRepository.findById(id).get();
 
 		GetBrandResponse response = this.modelMapperService.forResponse().map(brand, GetBrandResponse.class);
 
-		return new SuccessDataResult<GetBrandResponse>(response,Messages.BrandListed);
+		return new SuccessDataResult<GetBrandResponse>(response, Messages.BrandListed);
 	}
 
 	private void checkIfBrandExistsByName(String name) {

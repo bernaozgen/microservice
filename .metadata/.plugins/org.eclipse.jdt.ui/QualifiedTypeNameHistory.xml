@@ -1,15 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-    <fullyQualifiedTypeName name="javax.validation.constraints.Max"/>
-    <fullyQualifiedTypeName name="com.kodlamaio.invoicesercive.business.requests.UpdateInvoiceRequest"/>
-    <fullyQualifiedTypeName name="com.kodlamaio.invoicesercive.business.responses.UpdateInvoiceResponse"/>
-    <fullyQualifiedTypeName name="com.kodlamaio.invoicesercive.business.responses.CreateInvoiceResponse"/>
-    <fullyQualifiedTypeName name="com.kodlamaio.invoicesercive.business.responses.GetInvoiceResponse"/>
     <fullyQualifiedTypeName name="com.kodlamaio.paymentservice.business.abstracts.PaymentService"/>
     <fullyQualifiedTypeName name="com.kodlamaio.invoicesercive.business.constants.Messages"/>
     <fullyQualifiedTypeName name="com.kodlamaio.common.utilities.exceptions.BusinessException"/>
-    <fullyQualifiedTypeName name="javax.validation.constraints.NotEmpty"/>
-    <fullyQualifiedTypeName name="javax.validation.constraints.NotNull"/>
     <fullyQualifiedTypeName name="com.kodlamaio.paymentservice.business.adapters.PosCheckService"/>
     <fullyQualifiedTypeName name="com.kodlamaio.paymentservice.business.contants.Messages"/>
     <fullyQualifiedTypeName name="com.kodlamaio.filterService.business.responses.get.GetFiltersResponse"/>
@@ -42,7 +35,6 @@
     <fullyQualifiedTypeName name="org.springframework.beans.factory.annotation.Value"/>
     <fullyQualifiedTypeName name="org.springframework.context.annotation.Bean"/>
     <fullyQualifiedTypeName name="org.springframework.kafka.config.TopicBuilder"/>
-    <fullyQualifiedTypeName name="java.time.LocalDate"/>
     <fullyQualifiedTypeName name="org.slf4j.Logger"/>
     <fullyQualifiedTypeName name="org.slf4j.LoggerFactory"/>
     <fullyQualifiedTypeName name="org.apache.kafka.clients.admin.NewTopic"/>
@@ -57,7 +49,15 @@
     <fullyQualifiedTypeName name="com.kodlamaio.invantoryServer.entites.Car"/>
     <fullyQualifiedTypeName name="com.kodlamaio.invantoryServer.business.constants.Messages"/>
     <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.PathVariable"/>
-    <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.GetMapping"/>
     <fullyQualifiedTypeName name="org.springframework.stereotype.Service"/>
+    <fullyQualifiedTypeName name="com.kodlamaio.invoiceservice.business.constants.Messages"/>
+    <fullyQualifiedTypeName name="org.springframework.kafka.annotation.EnableKafka"/>
+    <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.GetMapping"/>
     <fullyQualifiedTypeName name="lombok.AllArgsConstructor"/>
+    <fullyQualifiedTypeName name="com.kodlamaio.inventoryService.business.constants.Messages"/>
+    <fullyQualifiedTypeName name="javax.validation.constraints.Min"/>
+    <fullyQualifiedTypeName name="javax.validation.constraints.Max"/>
+    <fullyQualifiedTypeName name="javax.validation.constraints.NotEmpty"/>
+    <fullyQualifiedTypeName name="javax.validation.constraints.NotNull"/>
+    <fullyQualifiedTypeName name="java.time.LocalDate"/>
 </qualifiedTypeNameHistroy>

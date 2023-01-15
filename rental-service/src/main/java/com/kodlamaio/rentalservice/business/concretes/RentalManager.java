@@ -1,5 +1,6 @@
 package com.kodlamaio.rentalservice.business.concretes;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -50,6 +51,7 @@ public class RentalManager implements RentalService {
 	    checkIfRentalExistsState(createRentalRequest.getCarId());
 		Rental rental = this.modelMapperService.forRequest().map(createRentalRequest, Rental.class);
 		rental.setId(UUID.randomUUID().toString());
+		rental.setDateStarted(LocalDate.now());
 		double totalPrice = createRentalRequest.getDailyPrice() * createRentalRequest.getRentedForDays();
 		rental.setTotalPrice(totalPrice);
 

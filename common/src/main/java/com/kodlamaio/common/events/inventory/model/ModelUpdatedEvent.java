@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 public class ModelUpdatedEvent {
 	private String message;
 	private String modelId;
-	private String modelName;
 	private String brandId;
+	private String modelName;
 	private String brandName;
 
 }

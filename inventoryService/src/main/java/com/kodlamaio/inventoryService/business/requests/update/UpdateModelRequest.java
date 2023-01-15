@@ -1,5 +1,8 @@
 package com.kodlamaio.inventoryService.business.requests.update;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,8 +11,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UpdateModelRequest {
+	@NotNull
+	@NotEmpty
 	private String id;
-	private String name;
+	@NotNull
+	@NotEmpty
 	private String brandId;
+	@NotNull
+	@NotEmpty
+	private String name;
 
 }

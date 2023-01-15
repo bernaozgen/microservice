@@ -11,8 +11,8 @@ public class CarCreatedEvent {
 	private String message;
 	private String carId;
 	private String brandId;
-	private String brandName;
 	private String modelId;
+	private String brandName;
 	private String modelName;
 	
 }

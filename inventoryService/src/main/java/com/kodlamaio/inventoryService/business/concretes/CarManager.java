@@ -109,6 +109,8 @@ public class CarManager implements CarService {
 
 	@Override
 	public void updateCarState(String carId, int state) {
+		checkIfCarExistById(carId);
+		
 		Car car = carRepository.findById(carId).get();
 		car.setState(state);
 		carRepository.save(car);
@@ -117,6 +119,7 @@ public class CarManager implements CarService {
 
 	@Override
 	public GetCarResponse getById(String carId) {
+		checkIfCarExistById(carId);
 		Car car = this.carRepository.findById(carId).get();
 
 		GetCarResponse response = this.modelMapperService.forResponse().map(car, GetCarResponse.class);
@@ -127,7 +130,7 @@ public class CarManager implements CarService {
 	private void checkIfCarExistById(String id) {
 		var result = this.carRepository.findById(id);
 		if (result == null) {
-			throw new BusinessException("CAR.NOT.EXİSTS");
+			throw new BusinessException(Messages.CarIdNotFound);
 		}
 
 	}
@@ -135,7 +138,7 @@ public class CarManager implements CarService {
 	private void checkIfCarExistByPlate(String plate) {
 		var result = this.carRepository.findByPlate(plate);
 		if (result != null) {
-			throw new BusinessException("PLATE.EXİSTS");
+			throw new BusinessException(Messages.PlateExist);
 		}
 	}
 

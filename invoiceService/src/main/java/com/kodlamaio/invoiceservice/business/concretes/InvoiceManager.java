@@ -1,5 +1,6 @@
 package com.kodlamaio.invoiceservice.business.concretes;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -30,6 +31,7 @@ public class InvoiceManager implements InvoiceService {
 		//checkIfCarExistsById(createInvoiceRequest.getCarId());
 		Invoice invoice = modelMapperService.forRequest().map(createInvoiceRequest, Invoice.class);
 		invoice.setId(UUID.randomUUID().toString());
+		invoice.setRentedDate(LocalDate.now());
 		invoiceRepository.save(invoice);
 		
 		CreateInvoiceResponse response = this.modelMapperService.forResponse().map(invoice,
@@ -75,6 +77,7 @@ public class InvoiceManager implements InvoiceService {
 //				GetInvoiceResponse.class);
 //		return new SuccessDataResult<GetInvoiceResponse>(getInvoiceResponse, Messages.InvoiceListed);
 //	}
+	
 	@Override
 	public void createInvoice(Invoice invoice) {
 		invoice.setId(UUID.randomUUID().toString());

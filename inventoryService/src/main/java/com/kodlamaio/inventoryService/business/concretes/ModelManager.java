@@ -87,6 +87,13 @@ public class ModelManager implements ModelService {
 				UpdateModelResponse.class);
 		return new SuccessDataResult<UpdateModelResponse>(updateModelResponse, Messages.ModelUpdated);
 	}
+	@Override
+	public DataResult<GetModelResponse> getById(String id) {
+		checkIfModelExistsById(id);
+		Model model = this.modelRepository.findById(id).get();
+		GetModelResponse getModelResponse = this.modelMapperService.forResponse().map(model, GetModelResponse.class);
+		return new SuccessDataResult<GetModelResponse>(getModelResponse, Messages.ModelListed);
+	}
 
 	private void checkIfModelExistsById(String id) {
 		var result = this.modelRepository.findById(id);
@@ -102,11 +109,6 @@ public class ModelManager implements ModelService {
 		}
 	}
 
-	@Override
-	public DataResult<GetModelResponse> getById(String id) {
-		Model model = this.modelRepository.findById(id).get();
-		GetModelResponse getModelResponse = this.modelMapperService.forResponse().map(model, GetModelResponse.class);
-		return new SuccessDataResult<GetModelResponse>(getModelResponse, Messages.ModelListed);
-	}
+
 
 }

@@ -1,6 +1,5 @@
 package com.kodlamaio.inventoryService.kafka;
 
-import org.apache.kafka.clients.admin.NewTopic;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -22,7 +21,7 @@ import lombok.AllArgsConstructor;
 public class InventoryProducer {
 	private static final Logger LOGGER = LoggerFactory.getLogger(InventoryProducer.class);
 
-	private NewTopic topic;
+
 
 	private KafkaTemplate<String, CarCreatedEvent> kafkaTemplateCarCreated;
 	private KafkaTemplate<String, CarDeletedEvent> kafkaTempleteCarDeleted;

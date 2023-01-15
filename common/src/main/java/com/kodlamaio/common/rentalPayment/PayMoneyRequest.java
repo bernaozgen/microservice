@@ -8,10 +8,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PayMoneyRequest {
-	private String cardHolder;
-	private String cardNo;
 	private String RentalId;
-	private double totalPrice;
+	private String cardNo;
+	private String cardHolder;
 	private double balance;
+	private double totalPrice;
+
 }
 
