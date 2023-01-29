@@ -32,6 +32,11 @@
 			<version>1.6.12</version>
 		</dependency>
 		<dependency>
+			<groupId>io.github.bernaozgen</groupId>
+			<artifactId>common</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
 			<groupId>io.micrometer</groupId>
 			<artifactId>micrometer-registry-prometheus</artifactId>
 		</dependency>

@@ -36,6 +36,7 @@ public class FilterManager implements FilterService {
 				.map(filter -> this.modelMapperService.forRequest().map(filter, GetAllFiltersResponse.class))
 				.collect(Collectors.toList());
 		return new SuccessDataResult<List<GetAllFiltersResponse>>(responses ,Messages.FilterListed);
+
 	}
 	@Override
 	public DataResult<List<GetAllFiltersResponse>> getByBrandName(String brandName) {
