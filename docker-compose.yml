@@ -1,0 +1,210 @@
+version: '3.8'
+
+services:
+
+  zookeeper:
+    image: 'bitnami/zookeeper:latest'
+    container_name: zookeeper
+    restart: always
+    ports:
+     - "2181:2181"
+    environment:
+     - ALLOW_ANONYMOUS_LOGIN=yes
+     
+  kafka:
+    image: 'bitnami/kafka:latest'
+    container_name: kafka
+    ports:
+     - "9092:9092"
+    restart: always
+    depends_on:
+     - zookeeper
+    environment:
+      - KAFKA_BROKER_ID=1
+      - KAFKA_CFG_LISTENERS=LISTENER_BRNA://localhost:9092,LISTENER_BRNOZ://kafka:29092
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=LISTENER_BRNA:PLAINTEXT,LISTENER_BRNOZ:PLAINTEXT
+      - KAFKA_CFG_ADVERTISED_LISTENERS=LISTENER_BRNA://localhost:9092,LISTENER_BRNOZ://kafka:29092
+      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=LISTENER_BRNOZ
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - ALLOW_PLAINTEXT_LISTENER=yes
+
+
+  configserver:
+    build: ./configServer
+    container_name: configserver
+    image: config-server-image
+    restart: always
+    ports:
+     - "8889:8888"
+    volumes:
+     - ./configServer:/app
+    environment:
+     - SPRING_CLOUD_CONFIG_SERVER_GIT_URI=https://github.com/bernaozgen/configServer
+  
+  discoveryserver:
+    build: ./discovery-server
+    container_name: discoveryserver
+    image: discovery-server-image
+    restart: always
+    ports:
+     - "9001:9001"
+    volumes:
+     - ./discovery-server:/app
+    depends_on:
+      - configserver
+
+  apigateway:
+    build: ./apigateway
+    container_name: apigateway
+    image: bernaozgen/api-gateway-image
+    restart: always
+    ports:
+     - "9011:9011"
+    volumes:
+     - ./apigateway:/app
+    depends_on:
+     - discoveryserver
+     - configserver
+    environment:
+     - SPRING_PROFILES_ACTIVE=docker
+
+  rentacarinventorydb:
+    container_name: rentacarinventorydb
+    image: postgres
+    restart: always
+    ports:
+      - "5437:5432"
+    environment:
+      - POSTGRES_USERS=admin
+      - POSTGRES_PASSWORD=123456
+
+    volumes:
+      - "./pg_data:/var/lib/postgresql/data"
+  
+  inventory-services:
+    build: ./inventoryService
+    container_name: inventory-service
+    image: inventory-service
+    restart: always
+    volumes:
+      - ./inventoryService:/app
+    depends_on:
+      - rentacarinventorydb
+      - discoveryserver
+      - kafka
+      - configserver
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+  
+  rentacarrentaldb: 
+   container_name: rentacarrentaldb
+   image: postgres
+   restart: always
+   ports:
+     - "5436:5432"
+   environment:
+     - POSTGRES_USER=admin
+     - POSTGRES_PASSWORD=123456
+
+   volumes:
+     - "./pg_data:/var/lib/postgresql/data"
+
+  rental-service:
+   build: ./rental-service
+   container_name: rentalService
+   image: rental-service
+   restart: always
+   volumes:
+     - ./rental-service:/app
+   depends_on:
+     - rentacarrentaldb
+     - discoveryserver
+     - kafka
+     - configserver
+   environment:
+     - SPRING_PROFILES_ACTIVE=docker
+
+  rentacarpaymentdb: 
+    container_name: rentacarpaymentdb
+    image: postgres
+    restart: always
+    ports:
+     - "5438:5432"
+    environment:
+     - POSTGRES_USER=admin
+     - POSTGRES_PASSWORD=12345
+
+    volumes:
+     - "./pg_data:/var/lib/postgresql/data"
+
+  paymentService:
+   build: ./paymentService
+   container_name: paymentService
+   image: payment-service
+   restart: always
+   volumes:
+     - ./paymentService:/app
+   depends_on:
+     - rentacarpaymentdb
+     - discoveryserver
+     - kafka
+     - configserver
+   environment:
+     - SPRING_PROFILES_ACTIVE=docker
+
+  rentacarinvoicedb: 
+    container_name: rentacarinvoicedb
+    image: postgres
+    restart: always
+    ports:
+     - "5439:5432"
+    environment:
+     - POSTGRES_USER=admin
+     - POSTGRES_PASSWORD=12345
+
+    volumes:
+     - "./pg_data:/var/lib/postgresql/data"
+
+  invoiceService:
+   build: ./invoiceService
+   container_name: invoiceService
+   image: invoice-service
+   restart: always
+   volumes:
+     - ./invoiceService:/app
+   depends_on:
+     - rentacarinvoicedb
+     - discoveryserver
+     - kafka
+     - configserver
+   environment:
+     - SPRING_PROFILES_ACTIVE=docker
+
+  rentalcarmongodb:
+    container_name: rentalcarmongodb
+    image: mongo
+    restart: always
+    ports:
+     - "27017:27017"
+    volumes:
+     - "/data/db/" 
+
+  filterService:
+   build: ./filterService
+   container_name: filterService
+   image: filter-service
+   restart: always
+   volumes:
+     - ./filterService:/app
+   depends_on:
+     - configserver
+     - discoveryserver
+     - kafka
+     - rentalcarmongodb
+   environment:
+     - SPRING_PROFILES_ACTIVE=docker 
+
+
+
+
+  
