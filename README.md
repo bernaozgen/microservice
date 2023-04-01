@@ -157,9 +157,11 @@ This is a project created in the microservices architecture. The infrastructure 
 
 ## Filter Service 
 
-> Araç ile ilgili bilgileri filtrelemek iin kullanıldı.
-* Mongorepository kullanıldı.
-* İnventory servis ile aralarında asenkron iletişim kurup kafka kullandım.
+> It was used to filter information related to cars.
+
+* Mongorepository was used.
+
+* Asynchronous communication was established between the inventory service and vehicles using Kafka
 * Request-Response pattern was used. The development was in accordance with Business Rules, Clean Code, and Domain Driven Design approach.
 
 * The project includes techniques such as Exceptions, Mapping, and Result.
